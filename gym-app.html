@@ -19,6 +19,7 @@
     --gray: #8A9E8F;
     --gray-light: #E8EDE9;
     --red: #FF4444;
+    --blue: #5BA3F5;
     --radius: 16px;
     --radius-sm: 10px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -26,293 +27,185 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: #0F1F15;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: #0F1F15; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
 
-  .phone-frame {
-    width: 390px;
-    height: 844px;
-    background: var(--green);
-    border-radius: 48px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 40px 120px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.08);
-  }
+  .phone-frame { width: 390px; height: 844px; background: var(--green); border-radius: 48px; overflow: hidden; position: relative; box-shadow: 0 40px 120px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.08); }
 
-  .screen {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: none;
-    position: absolute;
-    top: 0; left: 0;
-    display: none;
-    flex-direction: column;
-    background: var(--green);
-  }
+  .screen { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; position: absolute; top: 0; left: 0; display: none; flex-direction: column; background: var(--green); }
   .screen::-webkit-scrollbar { display: none; }
   .screen.active { display: flex; }
 
-  /* ─── STATUS BAR ─── */
-  .status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 28px 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    flex-shrink: 0;
-  }
+  /* STATUS BAR */
+  .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 0; font-size: 13px; font-weight: 600; color: var(--white); flex-shrink: 0; }
   .status-icons { display: flex; gap: 6px; align-items: center; }
 
-  /* ─── SPLASH / ONBOARDING ─── */
-  #screen-splash {
-    background: var(--green);
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-  }
-  .splash-logo {
-    width: 80px; height: 80px;
-    background: var(--yellow);
-    border-radius: 24px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-  .splash-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 42px; font-weight: 700;
-    color: var(--white); letter-spacing: -1px;
-  }
+  /* STEP BREADCRUMB - muestra el paso del flujo */
+  .step-trail { padding: 8px 24px; font-size: 11px; color: var(--gray); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  .step-trail span.current { color: var(--yellow); font-weight: 600; }
+  .step-trail .sep { color: rgba(255,255,255,0.2); }
+
+  /* TOP NAV */
+  .top-nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; flex-shrink: 0; }
+  .top-nav-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--white); }
+  .back-btn { width: 36px; height: 36px; background: rgba(255,255,255,0.08); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: var(--white); font-size: 18px; transition: var(--transition); }
+  .back-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .screen-content { padding: 20px 24px; flex: 1; overflow-y: auto; }
+
+  /* BUTTONS */
+  .btn-primary { width: 100%; padding: 16px; background: var(--yellow); color: var(--green); border: none; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: var(--transition); letter-spacing: -0.3px; }
+  .btn-primary:hover { background: var(--yellow-soft); transform: translateY(-1px); }
+  .btn-secondary { width: 100%; padding: 14px; background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: var(--transition); margin-top: 12px; }
+  .btn-secondary:hover { border-color: var(--yellow); color: var(--yellow); }
+  .btn-danger { width: 100%; padding: 14px; background: rgba(255,68,68,0.15); color: #FF6B6B; border: 1.5px solid rgba(255,68,68,0.3); border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: var(--transition); margin-top: 12px; }
+
+  /* SPLASH */
+  #screen-splash { background: var(--green); justify-content: center; align-items: center; gap: 24px; }
+  .splash-logo { width: 80px; height: 80px; background: var(--yellow); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 36px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  .splash-title { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; color: var(--white); letter-spacing: -1px; }
   .splash-title span { color: var(--yellow); }
   .splash-sub { color: var(--gray); font-size: 16px; }
 
-  /* ─── AUTH ─── */
-  #screen-auth {
-    padding: 0;
-  }
-  .auth-hero {
-    background: linear-gradient(170deg, var(--green-mid) 0%, var(--green) 60%);
-    padding: 60px 28px 40px;
+  /* DECISION SCREEN — pantalla romboidal de decisión */
+  .decision-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 40px 28px; gap: 32px; text-align: center; }
+  .decision-diamond {
+    width: 220px; height: 220px;
+    background: linear-gradient(135deg, rgba(91,163,245,0.15), rgba(91,163,245,0.05));
+    border: 2px solid rgba(91,163,245,0.4);
+    transform: rotate(45deg);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px;
     position: relative;
-    overflow: hidden;
   }
-  .auth-hero::before {
-    content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 200px; height: 200px;
-    background: var(--yellow);
-    border-radius: 50%;
-    opacity: 0.08;
-  }
-  .auth-hero-tag {
-    display: inline-block;
-    background: rgba(232,255,71,0.15);
-    border: 1px solid rgba(232,255,71,0.3);
-    color: var(--yellow);
-    font-size: 12px; font-weight: 600;
-    padding: 4px 12px; border-radius: 20px;
-    margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;
-  }
-  .auth-hero h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 36px; font-weight: 700;
-    color: var(--white); line-height: 1.1;
-    margin-bottom: 10px;
-  }
+  .decision-diamond-inner { transform: rotate(-45deg); padding: 20px; text-align: center; }
+  .decision-diamond-inner .q-icon { font-size: 32px; margin-bottom: 8px; }
+  .decision-diamond-inner .q-text { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); line-height: 1.3; }
+  .decision-actions { display: flex; gap: 12px; width: 100%; }
+  .decision-actions button { flex: 1; }
+  .decision-context { font-size: 13px; color: var(--gray); line-height: 1.5; max-width: 280px; }
+
+  /* AUTH HERO */
+  .auth-hero { background: linear-gradient(170deg, var(--green-mid) 0%, var(--green) 60%); padding: 60px 28px 40px; position: relative; overflow: hidden; }
+  .auth-hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: var(--yellow); border-radius: 50%; opacity: 0.08; }
+  .auth-hero-tag { display: inline-block; background: rgba(232,255,71,0.15); border: 1px solid rgba(232,255,71,0.3); color: var(--yellow); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+  .auth-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 10px; }
   .auth-hero h1 em { color: var(--yellow); font-style: normal; }
   .auth-hero p { color: var(--gray); font-size: 15px; }
-  .auth-body { padding: 32px 28px; flex: 1; }
-  .auth-tabs {
-    display: flex; background: rgba(255,255,255,0.05);
-    border-radius: var(--radius-sm); padding: 4px; margin-bottom: 28px;
-  }
-  .auth-tab {
-    flex: 1; padding: 10px; text-align: center;
-    font-size: 14px; font-weight: 600;
-    color: var(--gray); border-radius: 8px;
-    cursor: pointer; transition: var(--transition);
-  }
-  .auth-tab.active { background: var(--yellow); color: var(--green); }
 
+  /* AUTH CHOICE - elegir login o registro */
+  .choice-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 24px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .choice-card:hover { border-color: var(--yellow); background: rgba(232,255,71,0.05); }
+  .choice-card-icon { width: 56px; height: 56px; background: rgba(232,255,71,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+  .choice-card-info { flex: 1; }
+  .choice-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .choice-card-sub { font-size: 13px; color: var(--gray); }
+  .choice-card-arrow { font-size: 20px; color: var(--yellow); }
+
+  /* FORM */
   .form-group { margin-bottom: 16px; }
   .form-label { font-size: 12px; font-weight: 600; color: var(--gray); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; display: block; }
-  .form-input {
-    width: 100%; padding: 14px 16px;
-    background: rgba(255,255,255,0.06);
-    border: 1.5px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius-sm); color: var(--white);
-    font-size: 15px; font-family: 'DM Sans', sans-serif;
-    transition: var(--transition); outline: none;
-  }
+  .form-input { width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); color: var(--white); font-size: 15px; font-family: 'DM Sans', sans-serif; transition: var(--transition); outline: none; }
   .form-input:focus { border-color: var(--yellow); background: rgba(232,255,71,0.04); }
   .form-input::placeholder { color: var(--gray); }
 
-  /* ─── BUTTONS ─── */
-  .btn-primary {
-    width: 100%; padding: 16px;
-    background: var(--yellow); color: var(--green);
-    border: none; border-radius: var(--radius-sm);
-    font-size: 16px; font-weight: 700;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer; transition: var(--transition);
-    letter-spacing: -0.3px;
-  }
-  .btn-primary:hover { background: var(--yellow-soft); transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
+  /* STEP TITLE */
+  .step-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .step-sub { color: var(--gray); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
 
-  .btn-secondary {
-    width: 100%; padding: 14px;
-    background: transparent; color: var(--white);
-    border: 1.5px solid rgba(255,255,255,0.2);
-    border-radius: var(--radius-sm);
-    font-size: 15px; font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer; transition: var(--transition);
-    margin-top: 12px;
-  }
-  .btn-secondary:hover { border-color: var(--yellow); color: var(--yellow); }
+  /* MAIL CONFIRMATION */
+  .mail-card { background: linear-gradient(135deg, var(--green-mid), var(--green-light)); border-radius: var(--radius); padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid rgba(232,255,71,0.2); }
+  .mail-icon { font-size: 56px; margin-bottom: 16px; }
+  .mail-status { font-size: 14px; color: var(--gray); margin-bottom: 6px; }
+  .mail-addr { font-size: 15px; font-weight: 700; color: var(--yellow); word-break: break-all; }
 
-  .btn-icon {
-    background: none; border: none; cursor: pointer;
-    color: var(--white); font-size: 20px;
-    padding: 8px; border-radius: 8px;
-    transition: var(--transition);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .btn-icon:hover { background: rgba(255,255,255,0.1); }
+  /* T&C */
+  .terms-box { background: rgba(255,255,255,0.04); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 24px; max-height: 280px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.07); }
+  .terms-box h4 { color: var(--white); font-size: 13px; font-weight: 700; margin: 12px 0 6px; }
+  .terms-box h4:first-child { margin-top: 0; }
+  .terms-box p { color: var(--gray); font-size: 12px; line-height: 1.6; }
+  .terms-checkbox { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 16px; cursor: pointer; }
+  .terms-checkbox input { margin-top: 3px; accent-color: var(--yellow); }
+  .terms-checkbox label { font-size: 13px; color: var(--white); cursor: pointer; }
 
-  /* ─── TOP NAV ─── */
-  .top-nav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 24px 0; flex-shrink: 0;
-  }
-  .top-nav-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 20px; font-weight: 700; color: var(--white);
-  }
-  .back-btn {
-    width: 36px; height: 36px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 10px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; border: none; color: var(--white); font-size: 18px;
-    transition: var(--transition);
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.15); }
+  /* PLAN SUSCRIPCION */
+  .plan-card { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; cursor: pointer; transition: var(--transition); position: relative; }
+  .plan-card.featured { border-color: var(--yellow); background: rgba(232,255,71,0.06); }
+  .plan-card.selected { border-color: var(--green-accent); background: rgba(76,175,111,0.08); }
+  .plan-badge-featured { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--yellow); color: var(--green); font-size: 11px; font-weight: 700; padding: 3px 14px; border-radius: 20px; white-space: nowrap; }
+  .plan-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: var(--yellow); margin-bottom: 12px; }
+  .plan-price span { font-size: 16px; color: var(--gray); }
+  .plan-features { list-style: none; }
+  .plan-features li { font-size: 13px; color: var(--gray); padding: 4px 0; display: flex; align-items: center; gap: 8px; }
+  .plan-features li::before { content: '✓'; color: var(--green-accent); font-weight: 700; }
 
-  /* ─── HOME ─── */
-  #screen-home {
-    padding-bottom: 90px;
-  }
-  .home-header {
-    padding: 20px 24px 24px;
-    background: linear-gradient(180deg, var(--green-mid) 0%, var(--green) 100%);
-    position: relative; overflow: hidden;
-  }
-  .home-header::after {
-    content: ''; position: absolute;
-    bottom: -30px; right: -20px;
-    width: 120px; height: 120px;
-    background: var(--yellow); opacity: 0.06;
-    border-radius: 50%;
-  }
+  /* PAYMENT METHODS */
+  .payment-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: var(--transition); }
+  .payment-card:hover { border-color: var(--yellow); background: rgba(232,255,71,0.04); }
+  .payment-icon { width: 48px; height: 48px; background: rgba(232,255,71,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .payment-info { flex: 1; }
+  .payment-name { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .payment-desc { font-size: 12px; color: var(--gray); }
+
+  /* ACCESO CONCEDIDO */
+  .granted-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 40px 28px; text-align: center; gap: 16px; }
+  .granted-icon { width: 100px; height: 100px; background: rgba(76,175,111,0.15); border: 3px solid var(--green-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 16px; animation: pulse 2s infinite; }
+  .granted-title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--green-accent); }
+  .granted-sub { font-size: 15px; color: var(--gray); line-height: 1.6; }
+
+  /* ACCESO DENEGADO */
+  .denied-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 40px 28px; text-align: center; gap: 16px; }
+  .denied-icon { width: 100px; height: 100px; background: rgba(255,68,68,0.15); border: 3px solid var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 16px; }
+  .denied-title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: #FF6B6B; }
+  .denied-sub { font-size: 15px; color: var(--gray); line-height: 1.6; }
+
+  /* PROCESSING */
+  .processing-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 40px; gap: 24px; text-align: center; }
+  .spinner { width: 80px; height: 80px; border: 4px solid rgba(232,255,71,0.2); border-top-color: var(--yellow); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* HOME */
+  #screen-home { padding-bottom: 90px; }
+  .home-header { padding: 20px 24px 24px; background: linear-gradient(180deg, var(--green-mid) 0%, var(--green) 100%); position: relative; overflow: hidden; }
+  .home-header::after { content: ''; position: absolute; bottom: -30px; right: -20px; width: 120px; height: 120px; background: var(--yellow); opacity: 0.06; border-radius: 50%; }
   .home-greeting { color: var(--gray); font-size: 14px; margin-bottom: 4px; }
-  .home-name {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 26px; font-weight: 700; color: var(--white);
-    margin-bottom: 20px;
-  }
+  .home-name { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
   .home-name span { color: var(--yellow); }
-
-  .home-card {
-    background: linear-gradient(135deg, var(--yellow) 0%, var(--yellow-dark) 100%);
-    border-radius: var(--radius); padding: 20px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
+  .home-card { background: linear-gradient(135deg, var(--yellow) 0%, var(--yellow-dark) 100%); border-radius: var(--radius); padding: 20px; display: flex; justify-content: space-between; align-items: center; }
   .home-card-label { font-size: 12px; font-weight: 600; color: var(--green); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
   .home-card-value { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: var(--green); }
   .home-card-sub { font-size: 13px; color: var(--green); opacity: 0.6; }
   .home-card-icon { font-size: 40px; }
 
-  .section-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px; font-weight: 700; color: var(--white);
-    padding: 24px 24px 12px;
+  .menu-section-label {
+    font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: 1px; text-transform: uppercase;
+    padding: 24px 24px 12px; display: flex; align-items: center; gap: 8px;
   }
+  .menu-section-label::before { content: ''; width: 14px; height: 2px; background: var(--yellow); }
 
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 24px; }
-  .menu-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); padding: 20px;
-    cursor: pointer; transition: var(--transition);
-    position: relative; overflow: hidden;
-  }
+  .menu-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: var(--transition); position: relative; overflow: hidden; }
   .menu-card:hover { border-color: var(--yellow); transform: translateY(-2px); background: rgba(232,255,71,0.05); }
   .menu-card-icon { font-size: 28px; margin-bottom: 10px; }
   .menu-card-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
   .menu-card-sub { font-size: 12px; color: var(--gray); }
-  .menu-card-arrow {
-    position: absolute; bottom: 16px; right: 16px;
-    width: 24px; height: 24px; background: var(--yellow);
-    border-radius: 6px; display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-  }
+  .menu-card-arrow { position: absolute; bottom: 16px; right: 16px; width: 24px; height: 24px; background: var(--yellow); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
-  /* ─── BOTTOM NAV ─── */
-  .bottom-nav {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: rgba(26, 58, 42, 0.95);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255,255,255,0.08);
-    display: flex; padding: 12px 0 24px;
-  }
-  .nav-item {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; gap: 4px;
-    cursor: pointer; transition: var(--transition);
-  }
+  /* BOTTOM NAV */
+  .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(26,58,42,0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); display: flex; padding: 12px 0 24px; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: var(--transition); }
   .nav-icon { font-size: 22px; }
   .nav-label { font-size: 10px; font-weight: 600; color: var(--gray); letter-spacing: 0.3px; }
   .nav-item.active .nav-label { color: var(--yellow); }
-  .nav-item.active .nav-icon { filter: drop-shadow(0 0 8px rgba(232,255,71,0.6)); }
 
-  /* ─── PLAN NUTRICIONAL ─── */
-  .screen-content { padding: 20px 24px; flex: 1; overflow-y: auto; }
-
-  .objective-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-  .objective-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius-sm); padding: 16px;
-    cursor: pointer; transition: var(--transition); text-align: center;
-  }
-  .objective-card:hover, .objective-card.selected {
-    border-color: var(--yellow); background: rgba(232,255,71,0.08);
-  }
+  /* NUTRICION */
+  .objective-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; margin-bottom: 20px; }
+  .objective-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); padding: 16px; cursor: pointer; transition: var(--transition); text-align: center; }
+  .objective-card:hover, .objective-card.selected { border-color: var(--yellow); background: rgba(232,255,71,0.08); }
   .objective-card .obj-icon { font-size: 28px; margin-bottom: 8px; }
   .objective-card .obj-label { font-size: 13px; font-weight: 600; color: var(--white); }
-
-  .diet-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); padding: 20px; margin-bottom: 12px;
-    cursor: pointer; transition: var(--transition);
-  }
+  .diet-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; cursor: pointer; transition: var(--transition); }
   .diet-card:hover { border-color: rgba(232,255,71,0.4); }
   .diet-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
   .diet-name { font-size: 16px; font-weight: 700; color: var(--white); }
@@ -323,107 +216,69 @@
   .macro-val { font-size: 16px; font-weight: 700; color: var(--yellow); }
   .macro-label { font-size: 10px; color: var(--gray); }
 
-  /* ─── VIDA PUNTOS ─── */
-  .points-hero {
-    margin: 0 24px 20px;
-    background: linear-gradient(135deg, var(--green-mid), var(--green-light));
-    border-radius: var(--radius); padding: 24px;
-    text-align: center; border: 1px solid rgba(232,255,71,0.2);
-  }
-  .points-label { color: var(--gray); font-size: 13px; margin-bottom: 8px; }
-  .points-value {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 52px; font-weight: 700; color: var(--yellow);
-    line-height: 1;
-  }
-  .points-sub { color: var(--gray); font-size: 13px; margin-top: 8px; }
+  /* DIETA DETALLADA */
+  .meal-row { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .meal-time { font-size: 13px; color: var(--white); font-weight: 700; margin-bottom: 6px; }
+  .meal-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
 
-  .benefit-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 10px;
-    display: flex; align-items: center; gap: 16px;
-    cursor: pointer; transition: var(--transition);
-  }
+  /* VIDA PUNTOS */
+  .points-hero { margin: 0 24px 20px; background: linear-gradient(135deg, var(--green-mid), var(--green-light)); border-radius: var(--radius); padding: 24px; text-align: center; border: 1px solid rgba(232,255,71,0.2); }
+  .points-label { color: var(--gray); font-size: 13px; margin-bottom: 8px; }
+  .points-value { font-family: 'Space Grotesk', sans-serif; font-size: 52px; font-weight: 700; color: var(--yellow); line-height: 1; }
+  .points-sub { color: var(--gray); font-size: 13px; margin-top: 8px; }
+  .points-saldo-corner { position: absolute; top: 14px; right: 24px; background: var(--yellow); color: var(--green); font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; z-index: 10; }
+  .benefit-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: var(--transition); }
   .benefit-card:hover { border-color: rgba(232,255,71,0.4); background: rgba(232,255,71,0.04); }
-  .benefit-icon-wrap {
-    width: 48px; height: 48px; background: rgba(232,255,71,0.1);
-    border-radius: 12px; display: flex; align-items: center; justify-content: center;
-    font-size: 22px; flex-shrink: 0;
-  }
+  .benefit-icon-wrap { width: 48px; height: 48px; background: rgba(232,255,71,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
   .benefit-info { flex: 1; }
   .benefit-name { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
   .benefit-desc { font-size: 12px; color: var(--gray); }
   .benefit-cost { font-size: 14px; font-weight: 700; color: var(--yellow); }
 
-  /* ─── CLASES VIRTUALES ─── */
+  .obtencion-list { background: rgba(255,255,255,0.04); border-radius: var(--radius); padding: 16px; }
+  .obtencion-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .obtencion-item:last-child { border-bottom: none; }
+  .obtencion-label { font-size: 14px; color: var(--white); }
+  .obtencion-value { font-size: 14px; font-weight: 700; color: var(--yellow); }
+
+  /* CLASES */
   .filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
   .filter-row::-webkit-scrollbar { display: none; }
-  .filter-chip {
-    padding: 8px 16px; border-radius: 20px;
-    font-size: 13px; font-weight: 600; white-space: nowrap;
-    cursor: pointer; transition: var(--transition); border: none;
-    background: rgba(255,255,255,0.07); color: var(--gray);
-  }
+  .filter-chip { padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: var(--transition); border: none; background: rgba(255,255,255,0.07); color: var(--gray); }
   .filter-chip.active { background: var(--yellow); color: var(--green); }
-
-  .class-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); overflow: hidden; margin-bottom: 12px;
-    cursor: pointer; transition: var(--transition);
-  }
+  .class-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; cursor: pointer; transition: var(--transition); }
   .class-card:hover { border-color: rgba(232,255,71,0.4); transform: translateY(-2px); }
-  .class-thumb {
-    height: 100px; display: flex; align-items: center; justify-content: center;
-    font-size: 48px; position: relative;
-  }
-  .class-badge {
-    position: absolute; top: 10px; right: 10px;
-    background: var(--yellow); color: var(--green);
-    font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
+  .class-thumb { height: 90px; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
+  .class-badge { position: absolute; top: 10px; right: 10px; background: var(--yellow); color: var(--green); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .class-tipo-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); color: var(--white); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
   .class-body { padding: 14px; }
   .class-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-  .class-meta { display: flex; gap: 12px; }
+  .class-meta { display: flex; gap: 12px; flex-wrap: wrap; }
   .class-meta-item { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 4px; }
 
-  /* ─── QR SCREEN ─── */
-  .qr-container {
-    display: flex; flex-direction: column; align-items: center;
-    padding: 24px; gap: 20px;
-  }
-  .qr-box {
-    width: 200px; height: 200px;
-    background: var(--white); border-radius: 20px;
-    padding: 16px; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  }
-  .qr-inner {
-    width: 168px; height: 168px;
-    background: repeating-conic-gradient(var(--green) 0% 25%, var(--white) 0% 50%) 0 0/16px 16px;
-    border-radius: 8px;
-  }
-  .qr-timer {
-    background: rgba(232,255,71,0.1); border: 1px solid rgba(232,255,71,0.3);
-    border-radius: 30px; padding: 10px 24px;
-    font-size: 14px; font-weight: 600; color: var(--yellow);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .qr-timer-dot {
-    width: 8px; height: 8px; background: var(--yellow);
-    border-radius: 50%; animation: blink 1s infinite;
-  }
-  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+  /* HORARIO PICKER */
+  .horario-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
+  .horario-chip { padding: 12px; text-align: center; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1); font-size: 13px; font-weight: 600; color: var(--white); cursor: pointer; transition: var(--transition); }
+  .horario-chip.selected { background: var(--yellow); color: var(--green); border-color: var(--yellow); }
+  .horario-chip.unavailable { opacity: 0.3; cursor: not-allowed; }
 
-  /* ─── SEDES ─── */
-  .sede-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); padding: 18px; margin-bottom: 10px;
-    cursor: pointer; transition: var(--transition);
-  }
+  /* CLASS DETAIL */
+  .class-detail-hero { height: 160px; background: linear-gradient(135deg, var(--green-mid), var(--green-light)); display: flex; align-items: center; justify-content: center; font-size: 64px; margin: 0 -24px 20px; position: relative; }
+  .class-detail-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .class-detail-meta span { background: rgba(255,255,255,0.08); color: var(--white); font-size: 12px; padding: 5px 12px; border-radius: 20px; }
+  .class-detail-meta span.yellow { background: var(--yellow); color: var(--green); font-weight: 700; }
+
+  /* QR */
+  .qr-box { width: 200px; height: 200px; background: var(--white); border-radius: 20px; padding: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(0,0,0,0.4); margin: 0 auto 20px; }
+  .qr-inner { width: 168px; height: 168px; background: repeating-conic-gradient(var(--green) 0% 25%, var(--white) 0% 50%) 0 0/16px 16px; border-radius: 8px; }
+  .qr-timer { background: rgba(232,255,71,0.1); border: 1px solid rgba(232,255,71,0.3); border-radius: 30px; padding: 10px 24px; font-size: 14px; font-weight: 600; color: var(--yellow); display: flex; align-items: center; gap: 8px; margin: 0 auto 12px; width: fit-content; }
+  .qr-timer-dot { width: 8px; height: 8px; background: var(--yellow); border-radius: 50%; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+  .qr-valid-badge { background: linear-gradient(135deg, #FFB84D, #FF9233); color: white; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; display: inline-block; margin: 12px auto 0; }
+  .bio-icon-big { width: 120px; height: 120px; background: rgba(232,255,71,0.1); border: 3px solid var(--yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 56px; margin: 0 auto 24px; animation: pulse 2s infinite; }
+
+  /* SEDES */
+  .sede-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 18px; margin-bottom: 10px; cursor: pointer; transition: var(--transition); }
   .sede-card:hover { border-color: rgba(232,255,71,0.4); }
   .sede-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
   .sede-name { font-size: 16px; font-weight: 700; color: var(--white); }
@@ -431,200 +286,284 @@
   .sede-open.open { background: rgba(76,175,111,0.2); color: var(--green-accent); }
   .sede-open.closed { background: rgba(255,68,68,0.15); color: #FF6B6B; }
   .sede-address { font-size: 13px; color: var(--gray); margin-bottom: 12px; }
-  .sede-info-row { display: flex; gap: 16px; }
+  .sede-info-row { display: flex; gap: 16px; flex-wrap: wrap; }
   .sede-info-item { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 4px; }
 
-  /* ─── RESERVAS ─── */
-  .reserva-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); padding: 18px; margin-bottom: 10px;
-    transition: var(--transition);
-  }
-  .reserva-card-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .reserva-machine { font-size: 15px; font-weight: 700; color: var(--white); }
-  .reserva-status { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(76,175,111,0.2); color: var(--green-accent); }
-  .reserva-meta { font-size: 13px; color: var(--gray); }
-  .reserva-actions { display: flex; gap: 8px; margin-top: 12px; }
-  .btn-sm {
-    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: var(--transition); border: none;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .btn-sm-outline { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--white); }
-  .btn-sm-danger { background: rgba(255,68,68,0.15); color: #FF6B6B; }
+  .map-placeholder { background: linear-gradient(135deg, rgba(91,163,245,0.1), rgba(76,175,111,0.05)); border-radius: var(--radius); height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border: 1.5px solid rgba(255,255,255,0.08); flex-direction: column; gap: 8px; }
 
-  /* ─── RUTINAS ─── */
-  .routine-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius); padding: 18px; margin-bottom: 10px;
-    cursor: pointer; transition: var(--transition);
-  }
+  /* SEDE DETAIL */
+  .detail-option { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 18px; margin-bottom: 10px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 14px; }
+  .detail-option:hover { border-color: var(--yellow); background: rgba(232,255,71,0.04); }
+  .detail-option-icon { width: 44px; height: 44px; background: rgba(232,255,71,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .detail-option-text { flex: 1; }
+  .detail-option-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+  .detail-option-sub { font-size: 12px; color: var(--gray); }
+
+  .info-box { background: rgba(255,255,255,0.05); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.07); }
+  .info-box-title { font-size: 12px; font-weight: 700; color: var(--gray); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .info-box-content { font-size: 14px; color: var(--white); line-height: 1.7; }
+
+  /* RUTINAS */
+  .routine-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 18px; margin-bottom: 10px; cursor: pointer; transition: var(--transition); }
   .routine-card:hover { border-color: rgba(232,255,71,0.4); }
   .routine-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
   .routine-obj { display: inline-block; background: rgba(232,255,71,0.1); color: var(--yellow); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
   .routine-exercises { font-size: 13px; color: var(--gray); }
 
-  /* ─── PLAN SUSCRIPCION ─── */
-  .plan-card {
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius); padding: 20px; margin-bottom: 12px;
-    cursor: pointer; transition: var(--transition); position: relative;
-  }
-  .plan-card.featured { border-color: var(--yellow); background: rgba(232,255,71,0.06); }
-  .plan-badge-featured {
-    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-    background: var(--yellow); color: var(--green);
-    font-size: 11px; font-weight: 700; padding: 3px 14px; border-radius: 20px;
-    white-space: nowrap;
-  }
-  .plan-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-  .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: var(--yellow); margin-bottom: 12px; }
-  .plan-price span { font-size: 16px; color: var(--gray); }
-  .plan-features { list-style: none; }
-  .plan-features li { font-size: 13px; color: var(--gray); padding: 4px 0; display: flex; align-items: center; gap: 8px; }
-  .plan-features li::before { content: '✓'; color: var(--green-accent); font-weight: 700; }
-
-  /* ─── MODAL ─── */
-  .modal-overlay {
-    display: none; position: absolute; inset: 0;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-    z-index: 100; align-items: flex-end;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal-sheet {
-    width: 100%; background: var(--green-mid);
-    border-radius: 24px 24px 0 0; padding: 24px;
-    animation: slideUp 0.3s ease;
-  }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-handle {
-    width: 40px; height: 4px; background: rgba(255,255,255,0.2);
-    border-radius: 2px; margin: 0 auto 20px;
-  }
-  .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-  .modal-sub { font-size: 14px; color: var(--gray); margin-bottom: 24px; }
-
-  /* ─── NOTIFICATION / ALERT ─── */
-  .alert {
-    display: none; position: absolute; top: 60px; left: 20px; right: 20px;
-    padding: 14px 18px; border-radius: var(--radius-sm);
-    font-size: 14px; font-weight: 600; z-index: 200;
-    animation: slideDown 0.3s ease;
-  }
+  /* ALERT */
+  .alert { display: none; position: absolute; top: 60px; left: 20px; right: 20px; padding: 14px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; z-index: 200; animation: slideDown 0.3s ease; }
   .alert.show { display: flex; align-items: center; gap: 10px; }
   .alert.success { background: rgba(76,175,111,0.9); color: white; }
   .alert.error { background: rgba(255,68,68,0.9); color: white; }
   @keyframes slideDown { from { transform: translateY(-20px); opacity:0; } to { transform: translateY(0); opacity:1; } }
 
-  /* ─── SELECTOR HORARIO ─── */
-  .horario-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
-  .horario-chip {
-    padding: 10px; text-align: center; border-radius: var(--radius-sm);
-    background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1);
-    font-size: 13px; font-weight: 600; color: var(--white);
-    cursor: pointer; transition: var(--transition);
-  }
-  .horario-chip.selected { background: var(--yellow); color: var(--green); border-color: var(--yellow); }
-  .horario-chip.unavailable { opacity: 0.3; cursor: not-allowed; }
-
-  /* ─── DIVIDER ─── */
-  .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 20px 0; }
-
-  .text-center { text-align: center; }
   .text-yellow { color: var(--yellow); }
-  .mt-16 { margin-top: 16px; }
-  .mb-16 { margin-bottom: 16px; }
   .gap-info { font-size: 13px; color: var(--gray); text-align: center; margin-top: 12px; }
 </style>
 </head>
 <body>
 <div class="phone-frame">
 
-  <!-- ALERT -->
   <div class="alert" id="global-alert"></div>
 
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal-sheet" id="modal-content">
-      <div class="modal-handle"></div>
-      <div id="modal-body"></div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════ SPLASH ═══════════════════════════════ -->
+  <!-- ════════════ SPLASH ════════════ -->
   <div class="screen active" id="screen-splash">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
-    <div class="splash-logo">🏋️</div>
-    <div class="splash-title">Fit<span>Life</span></div>
-    <div class="splash-sub">Tu gimnasio, en tu bolsillo</div>
-    <div style="padding: 0 28px; width:100%; margin-top:20px;">
-      <button class="btn-primary" onclick="goto('auth')">Comenzar</button>
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; padding:40px;">
+      <div class="splash-logo">🏋️</div>
+      <div class="splash-title">Fit<span>Life</span></div>
+      <div class="splash-sub">Tu gimnasio, en tu bolsillo</div>
+      <div style="width:100%; margin-top:20px;">
+        <button class="btn-primary" onclick="goto('auth-choice')">Ingresar a la app</button>
+      </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ AUTH ═══════════════════════════════ -->
-  <div class="screen" id="screen-auth">
+  <!-- ════════════ NODO: ¿Iniciar sesión o Registrarse? ════════════ -->
+  <div class="screen" id="screen-auth-choice">
     <div class="auth-hero">
       <div class="status-bar" style="padding:0 0 16px;"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
       <div class="auth-hero-tag">Bienvenido</div>
       <h1>Entrena más<br><em>inteligente</em></h1>
       <p>Tu app de gimnasio todo en uno</p>
     </div>
-    <div class="auth-body">
-      <div class="auth-tabs">
-        <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar Sesión</div>
-        <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</div>
+    <div style="padding: 32px 28px; flex: 1;">
+      <div class="step-title" style="font-size:20px;">¿Iniciar sesión o Registrarse?</div>
+      <div class="step-sub">Elegí cómo querés ingresar</div>
+
+      <div class="choice-card" onclick="goto('login')">
+        <div class="choice-card-icon">🔑</div>
+        <div class="choice-card-info">
+          <div class="choice-card-title">Iniciar sesión</div>
+          <div class="choice-card-sub">Ya tengo una cuenta</div>
+        </div>
+        <div class="choice-card-arrow">→</div>
       </div>
 
-      <!-- LOGIN -->
-      <div id="form-login">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input class="form-input" type="email" placeholder="tucorreo@gmail.com" id="login-email">
+      <div class="choice-card" onclick="goto('register-mail')">
+        <div class="choice-card-icon">✨</div>
+        <div class="choice-card-info">
+          <div class="choice-card-title">Registrarse</div>
+          <div class="choice-card-sub">Crear cuenta nueva</div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Contraseña</label>
-          <input class="form-input" type="password" placeholder="••••••••" id="login-pass">
-        </div>
-        <div style="margin-top:8px;">
-          <button class="btn-primary" onclick="doLogin()">Iniciar Sesión</button>
-          <p class="gap-info">¿No tenés cuenta? <span class="text-yellow" style="cursor:pointer;" onclick="switchAuthTab('register')">Registrate</span></p>
-        </div>
-      </div>
-
-      <!-- REGISTER -->
-      <div id="form-register" style="display:none;">
-        <div class="form-group">
-          <label class="form-label">Nombre completo</label>
-          <input class="form-input" type="text" placeholder="Juan García" id="reg-name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input class="form-input" type="email" placeholder="tucorreo@gmail.com" id="reg-email">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Contraseña</label>
-          <input class="form-input" type="password" placeholder="••••••••" id="reg-pass">
-        </div>
-        <button class="btn-primary" onclick="doRegister()">Crear cuenta</button>
-        <p class="gap-info mt-16">Al registrarte aceptás los <span class="text-yellow">Términos y Condiciones</span></p>
+        <div class="choice-card-arrow">→</div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ PLAN SUSCRIPCION ═══════════════════════════════ -->
-  <div class="screen" id="screen-subscription">
+  <!-- ════════════ LOGIN: Ingresar credenciales ════════════ -->
+  <div class="screen" id="screen-login">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Iniciar sesión</span><span class="sep">›</span><span class="current">Ingresar credenciales</span>
+    </div>
     <div class="top-nav">
-      <div class="top-nav-title">Elegí tu plan</div>
+      <button class="back-btn" onclick="goto('auth-choice')">←</button>
+      <div class="top-nav-title">Iniciar sesión</div>
+      <div style="width:36px;"></div>
     </div>
     <div class="screen-content">
-      <p style="color:var(--gray); font-size:14px; margin-bottom:24px;">Seleccioná el plan que mejor se adapte a tus objetivos</p>
+      <div class="step-title">Ingresar credenciales</div>
+      <div class="step-sub">Usá el email y contraseña con los que te registraste</div>
 
-      <div class="plan-card" onclick="selectPlan('Básico')">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="tucorreo@gmail.com" id="login-email" value="usuario@fitlife.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" placeholder="••••••••" id="login-pass" value="demo1234">
+      </div>
+
+      <button class="btn-primary" onclick="doLogin()">Iniciar sesión</button>
+      <p class="gap-info">Tip: usar <span class="text-yellow">vencida@test.com</span> simula cuota vencida</p>
+    </div>
+  </div>
+
+  <!-- ════════════ DECISIÓN: ¿Tiene cuota al día? ════════════ -->
+  <div class="screen" id="screen-cuota-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Login</span><span class="sep">›</span><span class="current">Verificando estado de cuota</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">💰</div>
+          <div class="q-text">¿Tiene cuota<br>al día?</div>
+        </div>
+      </div>
+      <div class="decision-context">Verificamos el estado de tu suscripción</div>
+      <div style="width:100%;" id="cuota-result">
+        <div class="spinner" style="margin: 0 auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ DECISIÓN: ¿Renovar suscripción? ════════════ -->
+  <div class="screen" id="screen-renovar-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Login</span><span class="sep">›</span><span>Cuota vencida</span><span class="sep">›</span><span class="current">¿Renovar?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">🔄</div>
+          <div class="q-text">¿Renovar<br>suscripción?</div>
+        </div>
+      </div>
+      <div class="decision-context">Tu membresía venció. Renová tu plan para seguir accediendo al contenido</div>
+      <div class="decision-actions">
+        <button class="btn-danger" onclick="goto('access-denied')" style="margin-top:0;">No</button>
+        <button class="btn-primary" onclick="goto('payment-method')">Sí, renovar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ REGISTRO: Ingresar mail y contraseña ════════════ -->
+  <div class="screen" id="screen-register-mail">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Registro</span><span class="sep">›</span><span class="current">Mail y contraseña</span><span class="sep">›</span><span>Confirmar mail</span><span class="sep">›</span><span>T&C</span><span class="sep">›</span><span>Plan</span><span class="sep">›</span><span>Pago</span>
+    </div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('auth-choice')">←</button>
+      <div class="top-nav-title">Crear cuenta</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Ingresar mail y contraseña</div>
+      <div class="step-sub">Empezamos con tus datos de acceso</div>
+
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input class="form-input" type="text" placeholder="Juan García" id="reg-name" value="Santiago Estevez">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="tucorreo@gmail.com" id="reg-email" value="santiago@fitlife.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" placeholder="••••••••" id="reg-pass" value="demo1234">
+      </div>
+
+      <button class="btn-primary" onclick="doRegister()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ════════════ Enviar mail de confirmación ════════════ -->
+  <div class="screen" id="screen-send-mail">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Registro</span><span class="sep">›</span><span>Mail</span><span class="sep">›</span><span class="current">Enviando confirmación</span>
+    </div>
+    <div class="decision-screen">
+      <div class="bio-icon-big" style="background:rgba(91,163,245,0.1); border-color:var(--blue);">📨</div>
+      <div class="step-title" style="text-align:center;">Enviar mail de confirmación</div>
+      <div class="decision-context">Te estamos enviando un correo a:</div>
+      <div class="mail-addr" id="sent-mail-addr" style="font-size:16px; text-align:center;">santiago@fitlife.com</div>
+      <div class="spinner" style="margin: 8px auto;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════ Confirmar mail ════════════ -->
+  <div class="screen" id="screen-confirm-mail">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Registro</span><span class="sep">›</span><span>Mail</span><span class="sep">›</span><span class="current">Confirmar mail</span>
+    </div>
+    <div class="top-nav">
+      <div class="top-nav-title">Confirmar mail</div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Confirmar mail</div>
+      <div class="step-sub">Revisá tu bandeja de entrada y confirmá el correo</div>
+
+      <div class="mail-card">
+        <div class="mail-icon">📧</div>
+        <div class="mail-status">Mail enviado a</div>
+        <div class="mail-addr" id="confirm-mail-addr">santiago@fitlife.com</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:14px; margin-bottom:24px; border:1px dashed rgba(232,255,71,0.3);">
+        <div style="font-size:12px; color:var(--gray); margin-bottom:6px;">📥 Asunto</div>
+        <div style="font-size:13px; color:var(--white); margin-bottom:10px;">Confirmá tu cuenta FitLife</div>
+        <div style="font-size:12px; color:var(--gray);">Hacé click en el enlace del mail para verificar tu cuenta</div>
+      </div>
+
+      <button class="btn-primary" onclick="goto('terms')">Ya confirmé mi mail ✓</button>
+      <button class="btn-secondary" onclick="showAlert('Mail reenviado', 'success')">Reenviar mail</button>
+    </div>
+  </div>
+
+  <!-- ════════════ Firmar términos y condiciones ════════════ -->
+  <div class="screen" id="screen-terms">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Registro</span><span class="sep">›</span><span>Mail</span><span class="sep">›</span><span class="current">Firmar T&C</span>
+    </div>
+    <div class="top-nav">
+      <div class="top-nav-title">Términos y condiciones</div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Firmar términos y condiciones</div>
+      <div class="step-sub">Leé y aceptá los términos para continuar</div>
+
+      <div class="terms-box">
+        <h4>1. Política de privacidad</h4>
+        <p>Tus datos biométricos, de salud y personales son confidenciales. No se comparten con terceros sin tu consentimiento.</p>
+        <h4>2. Condiciones de membresía</h4>
+        <p>La membresía se renueva automáticamente cada mes. Podés cancelar en cualquier momento desde tu perfil.</p>
+        <h4>3. Uso responsable</h4>
+        <p>Queda prohibido el mal uso de las instalaciones, la reventa de beneficios y el préstamo del QR de acceso.</p>
+        <h4>4. Política de cancelación</h4>
+        <p>Las cancelaciones se procesan en hasta 5 días hábiles. Los reintegros se realizan al medio de pago original.</p>
+        <h4>5. Sistema Vida Puntos</h4>
+        <p>Los puntos no son canjeables por dinero ni transferibles. Vencen al cabo de 12 meses sin uso.</p>
+      </div>
+
+      <div class="terms-checkbox">
+        <input type="checkbox" id="terms-accept">
+        <label for="terms-accept">He leído y acepto los términos y condiciones</label>
+      </div>
+
+      <button class="btn-primary" onclick="doSignTerms()">Firmar y continuar</button>
+      <button class="btn-secondary" onclick="goto('access-denied')">No acepto</button>
+    </div>
+  </div>
+
+  <!-- ════════════ Elegir plan de suscripción ════════════ -->
+  <div class="screen" id="screen-plan">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Registro</span><span class="sep">›</span><span>T&C</span><span class="sep">›</span><span class="current">Elegir plan</span>
+    </div>
+    <div class="top-nav">
+      <div class="top-nav-title">Elegir plan</div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Elegir plan de suscripción</div>
+      <div class="step-sub">Seleccioná el plan que mejor se adapte</div>
+
+      <div class="plan-card" onclick="selectPlan(this, 'Básico', '$8.999')">
         <div class="plan-name">Básico</div>
         <div class="plan-price">$8.999 <span>/mes</span></div>
         <ul class="plan-features">
@@ -634,33 +573,179 @@
         </ul>
       </div>
 
-      <div class="plan-card featured" onclick="selectPlan('Premium')">
+      <div class="plan-card featured" onclick="selectPlan(this, 'Premium', '$14.999')">
         <div class="plan-badge-featured">⭐ Más popular</div>
         <div class="plan-name">Premium</div>
         <div class="plan-price">$14.999 <span>/mes</span></div>
         <ul class="plan-features">
           <li>Acceso a todas las sedes</li>
-          <li>Clases virtuales ilimitadas</li>
           <li>Plan nutricional personalizado</li>
           <li>Sistema Vida Puntos</li>
           <li>Reserva de máquinas</li>
         </ul>
       </div>
 
-      <div class="plan-card" onclick="selectPlan('Elite')">
+      <div class="plan-card" onclick="selectPlan(this, 'Elite', '$24.999')">
         <div class="plan-name">Elite</div>
         <div class="plan-price">$24.999 <span>/mes</span></div>
         <ul class="plan-features">
           <li>Todo lo del plan Premium</li>
           <li>Entrenador personal virtual</li>
           <li>Doble de puntos Vida</li>
-          <li>Clases presenciales incluidas</li>
         </ul>
+      </div>
+
+      <button class="btn-primary" id="btn-continue-plan" onclick="goto('pagar-check')" style="margin-top:20px; opacity:0.5; pointer-events:none;">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ════════════ DECISIÓN: ¿Pagar? ════════════ -->
+  <div class="screen" id="screen-pagar-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>Plan</span><span class="sep">›</span><span class="current">¿Pagar?</span>
+    </div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">💳</div>
+          <div class="q-text">¿Pagar?</div>
+        </div>
+      </div>
+      <div class="decision-context">
+        Confirmá que querés proceder al pago del plan <span class="text-yellow" id="pagar-plan-label">Premium</span>
+      </div>
+      <div class="decision-actions">
+        <button class="btn-danger" onclick="goto('access-denied')" style="margin-top:0;">No</button>
+        <button class="btn-primary" onclick="goto('payment-method')">Sí, pagar</button>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ HOME ═══════════════════════════════ -->
+  <!-- ════════════ Elegir método de pago ════════════ -->
+  <div class="screen" id="screen-payment-method">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail">
+      <span>¿Pagar?</span><span class="sep">›</span><span class="current">Método de pago</span><span class="sep">›</span><span>Procesar</span><span class="sep">›</span><span>¿Exitoso?</span>
+    </div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('pagar-check')">←</button>
+      <div class="top-nav-title">Método de pago</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Elegir método de pago</div>
+      <div class="step-sub">Plan seleccionado: <span class="text-yellow" id="payment-plan-label">Premium — $14.999/mes</span></div>
+
+      <div class="payment-card" onclick="procesarPago('Tarjeta de crédito')">
+        <div class="payment-icon">💳</div>
+        <div class="payment-info">
+          <div class="payment-name">Tarjeta de crédito</div>
+          <div class="payment-desc">Visa, Mastercard, Amex</div>
+        </div>
+        <span style="color:var(--yellow);">→</span>
+      </div>
+
+      <div class="payment-card" onclick="procesarPago('Tarjeta de débito')">
+        <div class="payment-icon">💳</div>
+        <div class="payment-info">
+          <div class="payment-name">Tarjeta de débito</div>
+          <div class="payment-desc">Débito en cuenta directo</div>
+        </div>
+        <span style="color:var(--yellow);">→</span>
+      </div>
+
+      <div class="payment-card" onclick="procesarPago('Transferencia bancaria')">
+        <div class="payment-icon">🏦</div>
+        <div class="payment-info">
+          <div class="payment-name">Transferencia bancaria</div>
+          <div class="payment-desc">CBU / CVU / Alias</div>
+        </div>
+        <span style="color:var(--yellow);">→</span>
+      </div>
+
+      <div class="payment-card" onclick="procesarPago('MercadoPago')">
+        <div class="payment-icon">📱</div>
+        <div class="payment-info">
+          <div class="payment-name">MercadoPago</div>
+          <div class="payment-desc">Cuenta MP o QR (simula fallo)</div>
+        </div>
+        <span style="color:var(--yellow);">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ Procesar pago ════════════ -->
+  <div class="screen" id="screen-processing">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Método de pago</span><span class="sep">›</span><span class="current">Procesando</span></div>
+    <div class="processing-screen">
+      <div class="spinner"></div>
+      <div class="step-title">Procesar pago</div>
+      <div class="step-sub" style="margin-bottom:0;">Con <span class="text-yellow" id="processing-method-label">Tarjeta de crédito</span></div>
+    </div>
+  </div>
+
+  <!-- ════════════ DECISIÓN: ¿Pago exitoso? ════════════ -->
+  <div class="screen" id="screen-pago-exitoso-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Procesar pago</span><span class="sep">›</span><span class="current">¿Exitoso?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">✓</div>
+          <div class="q-text">¿Pago<br>exitoso?</div>
+        </div>
+      </div>
+      <div class="decision-context">Procesando respuesta del banco...</div>
+      <div class="spinner" style="margin: 0 auto;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════ DECISIÓN: ¿Reintentar? ════════════ -->
+  <div class="screen" id="screen-reintentar-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Pago fallido</span><span class="sep">›</span><span class="current">¿Reintentar?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond" style="border-color:rgba(255,68,68,0.4); background: linear-gradient(135deg, rgba(255,68,68,0.15), rgba(255,68,68,0.05));">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">⚠️</div>
+          <div class="q-text">¿Reintentar?</div>
+        </div>
+      </div>
+      <div class="decision-context">El pago no pudo procesarse. ¿Querés intentar de nuevo?</div>
+      <div class="decision-actions">
+        <button class="btn-danger" onclick="goto('access-denied')" style="margin-top:0;">No</button>
+        <button class="btn-primary" onclick="goto('payment-method')">Sí, reintentar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ Acceso concedido al contenido ════════════ -->
+  <div class="screen" id="screen-access-granted">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="granted-screen">
+      <div class="granted-icon">✓</div>
+      <div class="granted-title">Acceso concedido</div>
+      <div class="granted-sub">Bienvenido al contenido de la app. Te redirigimos a la pantalla de inicio.</div>
+      <div class="spinner" style="margin: 16px auto; width:40px; height:40px; border-width:3px;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════ Acceso denegado ════════════ -->
+  <div class="screen" id="screen-access-denied">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="denied-screen">
+      <div class="denied-icon">✕</div>
+      <div class="denied-title">Acceso denegado</div>
+      <div class="denied-sub">No podés acceder al contenido de la app sin una suscripción activa.</div>
+      <div style="width:100%; margin-top:16px;">
+        <button class="btn-primary" onclick="goto('auth-choice')">Volver al inicio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ HOME: Pantalla de Inicio ════════════ -->
   <div class="screen" id="screen-home">
     <div class="status-bar" style="padding:14px 28px 0; flex-shrink:0;"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
     <div class="home-header">
@@ -669,152 +754,103 @@
       <div class="home-card">
         <div>
           <div class="home-card-label">Vida Puntos</div>
-          <div class="home-card-value">2.450</div>
-          <div class="home-card-sub">Plan Premium activo</div>
+          <div class="home-card-value" id="home-points">2.450</div>
+          <div class="home-card-sub" id="home-plan-label">Plan Premium activo</div>
         </div>
         <div class="home-card-icon">⚡</div>
       </div>
     </div>
 
-    <div class="section-title">¿Qué querés hacer?</div>
+    <div class="menu-section-label">Menú de otras opciones — ¿Qué opción elegís?</div>
+
     <div class="menu-grid">
-      <div class="menu-card" onclick="goto('qr')">
-        <div class="menu-card-icon">📱</div>
-        <div class="menu-card-title">QR de Acceso</div>
-        <div class="menu-card-sub">Entrá a tu sede</div>
-        <div class="menu-card-arrow">→</div>
-      </div>
       <div class="menu-card" onclick="goto('nutrition')">
         <div class="menu-card-icon">🥗</div>
-        <div class="menu-card-title">Nutrición</div>
-        <div class="menu-card-sub">Plan personalizado</div>
+        <div class="menu-card-title">Plan de Nutrición</div>
+        <div class="menu-card-sub">Recomendaciones</div>
+        <div class="menu-card-arrow">→</div>
+      </div>
+      <div class="menu-card" onclick="goto('puntos-vida-check')">
+        <div class="menu-card-icon">⚡</div>
+        <div class="menu-card-title">Puntos Vida</div>
+        <div class="menu-card-sub">Saldo o beneficios</div>
         <div class="menu-card-arrow">→</div>
       </div>
       <div class="menu-card" onclick="goto('classes')">
         <div class="menu-card-icon">🎥</div>
         <div class="menu-card-title">Clases</div>
-        <div class="menu-card-sub">Virtuales y presenciales</div>
+        <div class="menu-card-sub">Virtuales o presenciales</div>
         <div class="menu-card-arrow">→</div>
       </div>
-      <div class="menu-card" onclick="goto('points')">
-        <div class="menu-card-icon">🎁</div>
-        <div class="menu-card-title">Vida Puntos</div>
-        <div class="menu-card-sub">Canjea beneficios</div>
+      <div class="menu-card" onclick="goto('routines')">
+        <div class="menu-card-icon">💪</div>
+        <div class="menu-card-title">Rutinas</div>
+        <div class="menu-card-sub">Personalizadas</div>
+        <div class="menu-card-arrow">→</div>
+      </div>
+      <div class="menu-card" onclick="goto('qr-bio')">
+        <div class="menu-card-icon">📱</div>
+        <div class="menu-card-title">QR de acceso</div>
+        <div class="menu-card-sub">Una vez en la sede</div>
         <div class="menu-card-arrow">→</div>
       </div>
       <div class="menu-card" onclick="goto('sedes')">
         <div class="menu-card-icon">📍</div>
         <div class="menu-card-title">Sedes</div>
-        <div class="menu-card-sub">Encontrá tu gimnasio</div>
+        <div class="menu-card-sub">Mapa con sedes</div>
         <div class="menu-card-arrow">→</div>
-      </div>
-      <div class="menu-card" onclick="goto('reservas')">
-        <div class="menu-card-icon">📅</div>
-        <div class="menu-card-title">Reservas</div>
-        <div class="menu-card-sub">Máquinas y horarios</div>
-        <div class="menu-card-arrow">→</div>
-      </div>
-    </div>
-
-    <div class="section-title">Rutinas de hoy</div>
-    <div style="padding: 0 24px 24px;">
-      <div class="routine-card" onclick="goto('routines')">
-        <div class="routine-name">Fuerza — Tren Superior</div>
-        <div class="routine-obj">Ganar músculo</div>
-        <div class="routine-exercises">8 ejercicios · 45 min · Intermedio</div>
       </div>
     </div>
 
     <div class="bottom-nav">
-      <div class="nav-item active" onclick="goto('home')">
-        <span class="nav-icon">🏠</span><span class="nav-label">Inicio</span>
-      </div>
-      <div class="nav-item" onclick="goto('classes')">
-        <span class="nav-icon">🎥</span><span class="nav-label">Clases</span>
-      </div>
-      <div class="nav-item" onclick="goto('qr')">
-        <span class="nav-icon">📱</span><span class="nav-label">QR</span>
-      </div>
-      <div class="nav-item" onclick="goto('sedes')">
-        <span class="nav-icon">📍</span><span class="nav-label">Sedes</span>
-      </div>
-      <div class="nav-item" onclick="goto('points')">
-        <span class="nav-icon">⚡</span><span class="nav-label">Puntos</span>
-      </div>
+      <div class="nav-item active" onclick="goto('home')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></div>
+      <div class="nav-item" onclick="goto('classes')"><span class="nav-icon">🎥</span><span class="nav-label">Clases</span></div>
+      <div class="nav-item" onclick="goto('qr-bio')"><span class="nav-icon">📱</span><span class="nav-label">QR</span></div>
+      <div class="nav-item" onclick="goto('sedes')"><span class="nav-icon">📍</span><span class="nav-label">Sedes</span></div>
+      <div class="nav-item" onclick="goto('puntos-vida-check')"><span class="nav-icon">⚡</span><span class="nav-label">Puntos</span></div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ QR ═══════════════════════════════ -->
-  <div class="screen" id="screen-qr">
-    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
-    <div class="top-nav">
-      <button class="back-btn" onclick="goto('home')">←</button>
-      <div class="top-nav-title">QR de Acceso</div>
-      <div style="width:36px;"></div>
-    </div>
-    <div class="qr-container" style="flex:1; justify-content:center;">
-      <p style="color:var(--gray); font-size:14px; text-align:center;">Mostrá este código en la entrada de tu sede</p>
-      <div style="text-align:center;">
-        <div id="qr-state-verify">
-          <p style="color:var(--white); margin-bottom:20px; font-size:15px;">Se requiere verificación biométrica</p>
-          <div style="font-size:80px; margin-bottom:20px;">👆</div>
-          <button class="btn-primary" onclick="startBiometric()" style="width:220px;">Verificar huella digital</button>
-        </div>
-        <div id="qr-state-show" style="display:none;">
-          <div class="qr-box" style="margin: 0 auto 20px;">
-            <div class="qr-inner"></div>
-          </div>
-          <div class="qr-timer" style="margin: 0 auto; width:fit-content;">
-            <div class="qr-timer-dot"></div>
-            <span>Válido por <span id="qr-countdown">5:00</span></span>
-          </div>
-          <p style="color:var(--gray); font-size:12px; margin-top:12px;">Presentá este QR en el lector de acceso</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════ NUTRICION ═══════════════════════════════ -->
+  <!-- ════════════ NUTRICIÓN: Ver recomendaciones ════════════ -->
   <div class="screen" id="screen-nutrition">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span class="current">Ver recomendaciones nutricionales</span><span class="sep">›</span><span>Elegir objetivo</span><span class="sep">›</span><span>Dieta detallada</span></div>
     <div class="top-nav">
       <button class="back-btn" onclick="goto('home')">←</button>
-      <div class="top-nav-title">Plan Nutricional</div>
+      <div class="top-nav-title">Plan de Nutrición</div>
       <div style="width:36px;"></div>
     </div>
     <div class="screen-content">
-      <p style="color:var(--gray); font-size:14px; margin-bottom:20px;">Elegí tu objetivo y te mostramos el plan ideal</p>
+      <div class="step-title">Ver recomendaciones nutricionales</div>
+      <div class="step-sub">Elegí en base a tus objetivos</div>
 
-      <div class="section-title" style="padding:0 0 12px;">¿Cuál es tu objetivo?</div>
       <div class="objective-grid">
-        <div class="objective-card" onclick="selectObjective(this, 'deficit')">
+        <div class="objective-card" onclick="selectNutObj(this, 'deficit', '🔥 Perder peso')">
           <div class="obj-icon">🔥</div>
           <div class="obj-label">Perder peso</div>
         </div>
-        <div class="objective-card" onclick="selectObjective(this, 'mantenimiento')">
+        <div class="objective-card" onclick="selectNutObj(this, 'mantenimiento', '⚖️ Mantenerme')">
           <div class="obj-icon">⚖️</div>
           <div class="obj-label">Mantenerme</div>
         </div>
-        <div class="objective-card" onclick="selectObjective(this, 'volumen')">
+        <div class="objective-card" onclick="selectNutObj(this, 'volumen', '💪 Ganar músculo')">
           <div class="obj-icon">💪</div>
           <div class="obj-label">Ganar músculo</div>
         </div>
-        <div class="objective-card" onclick="selectObjective(this, 'rendimiento')">
+        <div class="objective-card" onclick="selectNutObj(this, 'rendimiento', '⚡ Rendimiento')">
           <div class="obj-icon">⚡</div>
           <div class="obj-label">Rendimiento</div>
         </div>
       </div>
 
-      <div class="divider"></div>
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; color:var(--white); margin: 8px 0 12px;">Dietas recomendadas</div>
 
-      <div class="section-title" style="padding:0 0 12px;">Dietas recomendadas</div>
-
-      <div class="diet-card" onclick="showDietDetail('Mediterránea', '1.800 kcal', 'Rica en vegetales, aceite de oliva, proteínas magras y cereales integrales. Ideal para déficit calórico saludable.')">
+      <div class="diet-card" onclick="goto('nutrition-detail', 'Mediterránea')">
         <div class="diet-card-header">
           <div class="diet-name">🫒 Mediterránea</div>
           <div class="diet-cal">1.800 kcal</div>
         </div>
-        <div class="diet-desc">Rica en vegetales, aceite de oliva, proteínas magras y cereales integrales.</div>
+        <div class="diet-desc">Vegetales, aceite de oliva, proteínas magras y cereales integrales.</div>
         <div class="diet-macros">
           <div class="macro"><div class="macro-val">45%</div><div class="macro-label">Carbos</div></div>
           <div class="macro"><div class="macro-val">30%</div><div class="macro-label">Proteína</div></div>
@@ -822,7 +858,7 @@
         </div>
       </div>
 
-      <div class="diet-card" onclick="showDietDetail('Alta en proteínas', '2.200 kcal', 'Maximiza la síntesis muscular con alta ingesta proteica. Ideal para ganancia de masa muscular.')">
+      <div class="diet-card" onclick="goto('nutrition-detail', 'Alta en proteínas')">
         <div class="diet-card-header">
           <div class="diet-name">🥩 Alta en proteínas</div>
           <div class="diet-cal">2.200 kcal</div>
@@ -835,12 +871,12 @@
         </div>
       </div>
 
-      <div class="diet-card" onclick="showDietDetail('Plant-based', '1.600 kcal', '100% de origen vegetal. Rica en legumbres, tofu, tempeh y proteínas vegetales completas.')">
+      <div class="diet-card" onclick="goto('nutrition-detail', 'Plant-based')">
         <div class="diet-card-header">
           <div class="diet-name">🌱 Plant-based</div>
           <div class="diet-cal">1.600 kcal</div>
         </div>
-        <div class="diet-desc">100% de origen vegetal. Rica en legumbres, tofu y proteínas vegetales.</div>
+        <div class="diet-desc">100% de origen vegetal. Legumbres, tofu y proteínas vegetales.</div>
         <div class="diet-macros">
           <div class="macro"><div class="macro-val">55%</div><div class="macro-label">Carbos</div></div>
           <div class="macro"><div class="macro-val">25%</div><div class="macro-label">Proteína</div></div>
@@ -850,23 +886,168 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ VIDA PUNTOS ═══════════════════════════════ -->
-  <div class="screen" id="screen-points">
+  <!-- ════════════ NUTRICIÓN: Consultar dieta detallada con alimentación sugerida ════════════ -->
+  <div class="screen" id="screen-nutrition-detail">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Recomendaciones</span><span class="sep">›</span><span>Objetivo</span><span class="sep">›</span><span class="current">Dieta detallada</span></div>
     <div class="top-nav">
-      <button class="back-btn" onclick="goto('home')">←</button>
-      <div class="top-nav-title">Vida Puntos</div>
+      <button class="back-btn" onclick="goto('nutrition')">←</button>
+      <div class="top-nav-title" id="diet-detail-title">Mediterránea</div>
       <div style="width:36px;"></div>
     </div>
+    <div class="screen-content">
+      <div class="step-title">Consultar dieta detallada</div>
+      <div class="step-sub">Con alimentación sugerida para el día</div>
+
+      <div style="background:rgba(232,255,71,0.08); border:1px solid rgba(232,255,71,0.2); border-radius:var(--radius); padding:16px; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:12px; color:var(--gray); margin-bottom:4px;">Calorías diarias</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:var(--yellow);" id="diet-detail-cal">1.800 kcal</div>
+          </div>
+          <div style="font-size:36px;" id="diet-detail-emoji">🫒</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; color:var(--white); margin-bottom:12px;">Alimentación sugerida</div>
+
+      <div class="meal-row">
+        <div class="meal-time">🌅 Desayuno (07:30)</div>
+        <div class="meal-desc">Avena con frutas y proteína en polvo · Tostada con palta y huevo</div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-time">🍎 Media mañana (10:30)</div>
+        <div class="meal-desc">Yogur griego con almendras y miel</div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-time">☀️ Almuerzo (13:00)</div>
+        <div class="meal-desc">Pollo grillado con quinoa y vegetales asados · Ensalada verde</div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-time">🥤 Merienda (17:00)</div>
+        <div class="meal-desc">Batido proteico con banana y mantequilla de maní</div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-time">🌙 Cena (20:30)</div>
+        <div class="meal-desc">Salmón con batata al horno y espinaca salteada</div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <button class="btn-primary" onclick="goto('home'); showAlert('Plan nutricional guardado', 'success')">Guardar este plan</button>
+        <button class="btn-secondary" onclick="goto('nutrition')">Volver a recomendaciones</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ PUNTOS VIDA: ¿Ver saldo o beneficios? ════════════ -->
+  <div class="screen" id="screen-puntos-vida-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span class="current">¿Ver saldo o beneficios?</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('home')">←</button>
+      <div class="top-nav-title">Puntos Vida</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content" style="display:flex; flex-direction:column; justify-content:center;">
+      <div class="step-title" style="text-align:center;">¿Qué querés hacer?</div>
+      <div class="step-sub" style="text-align:center;">Elegí entre consultar tu saldo o canjear beneficios</div>
+
+      <div class="choice-card" onclick="goto('puntos-saldo')">
+        <div class="choice-card-icon">💰</div>
+        <div class="choice-card-info">
+          <div class="choice-card-title">Saldo</div>
+          <div class="choice-card-sub">Consultar puntos y vía de obtención</div>
+        </div>
+        <div class="choice-card-arrow">→</div>
+      </div>
+
+      <div class="choice-card" onclick="goto('puntos-beneficios')">
+        <div class="choice-card-icon">🎁</div>
+        <div class="choice-card-info">
+          <div class="choice-card-title">Beneficios</div>
+          <div class="choice-card-sub">Canjear puntos por premios</div>
+        </div>
+        <div class="choice-card-arrow">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ PUNTOS VIDA: Consultar saldo y vía de obtención ════════════ -->
+  <div class="screen" id="screen-puntos-saldo">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Puntos Vida</span><span class="sep">›</span><span class="current">Consultar saldo + vía de obtención</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('puntos-vida-check')">←</button>
+      <div class="top-nav-title">Saldo</div>
+      <div style="width:36px;"></div>
+    </div>
+
     <div class="points-hero">
-      <div class="points-label">Tus puntos disponibles</div>
-      <div class="points-value">2.450</div>
+      <div class="points-label">Saldo de puntos</div>
+      <div class="points-value" id="display-points-saldo">2.450</div>
       <div class="points-sub">Equivalen a $2.450 en beneficios</div>
     </div>
-    <div class="screen-content" style="padding-top:0;">
-      <div class="section-title" style="padding:0 0 12px;">Canjear beneficios</div>
 
-      <div class="benefit-card" onclick="showCanjear('🧴 Proteína en polvo (1kg)', 1500)">
+    <div class="screen-content" style="padding-top:0;">
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; color:var(--white); margin-bottom:12px;">Vía de obtención (objetivos)</div>
+
+      <div class="obtencion-list">
+        <div class="obtencion-item">
+          <div>
+            <div class="obtencion-label">✅ Ir al gimnasio</div>
+            <div style="font-size:11px; color:var(--gray); margin-top:2px;">Por cada visita registrada</div>
+          </div>
+          <div class="obtencion-value">+10 pts</div>
+        </div>
+        <div class="obtencion-item">
+          <div>
+            <div class="obtencion-label">🎥 Completar clase virtual</div>
+            <div style="font-size:11px; color:var(--gray); margin-top:2px;">Por clase finalizada</div>
+          </div>
+          <div class="obtencion-value">+20 pts</div>
+        </div>
+        <div class="obtencion-item">
+          <div>
+            <div class="obtencion-label">💪 Completar rutina</div>
+            <div style="font-size:11px; color:var(--gray); margin-top:2px;">Por rutina finalizada</div>
+          </div>
+          <div class="obtencion-value">+15 pts</div>
+        </div>
+        <div class="obtencion-item">
+          <div>
+            <div class="obtencion-label">🎯 Cumplir objetivo semanal</div>
+            <div style="font-size:11px; color:var(--gray); margin-top:2px;">Por semana completa</div>
+          </div>
+          <div class="obtencion-value">+50 pts</div>
+        </div>
+        <div class="obtencion-item">
+          <div>
+            <div class="obtencion-label">👥 Referir un amigo</div>
+            <div style="font-size:11px; color:var(--gray); margin-top:2px;">Cuando se suscribe</div>
+          </div>
+          <div class="obtencion-value">+100 pts</div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="goto('puntos-beneficios')">Ver beneficios disponibles →</button>
+    </div>
+  </div>
+
+  <!-- ════════════ PUNTOS VIDA: Ver lista de beneficios ════════════ -->
+  <div class="screen" id="screen-puntos-beneficios">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="points-saldo-corner" id="display-points-corner">2.450 pts</div>
+    <div class="step-trail"><span>Puntos Vida</span><span class="sep">›</span><span class="current">Lista de beneficios</span><span class="sep">›</span><span>Seleccionar</span><span class="sep">›</span><span>¿Confirmar canje?</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('puntos-vida-check')">←</button>
+      <div class="top-nav-title">Beneficios</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Ver lista de beneficios</div>
+      <div class="step-sub">Seleccioná un beneficio para canjear</div>
+
+      <div class="benefit-card" onclick="selectBeneficio('🧴 Proteína en polvo (1kg)', 1500)">
         <div class="benefit-icon-wrap">🧴</div>
         <div class="benefit-info">
           <div class="benefit-name">Proteína en polvo (1kg)</div>
@@ -875,16 +1056,16 @@
         <div class="benefit-cost">1.500 pts</div>
       </div>
 
-      <div class="benefit-card" onclick="showCanjear('👕 Remera FitLife', 800)">
+      <div class="benefit-card" onclick="selectBeneficio('👕 Remera FitLife', 800)">
         <div class="benefit-icon-wrap">👕</div>
         <div class="benefit-info">
           <div class="benefit-name">Remera FitLife</div>
-          <div class="benefit-desc">Talle a elección, varios colores</div>
+          <div class="benefit-desc">Talle a elección</div>
         </div>
         <div class="benefit-cost">800 pts</div>
       </div>
 
-      <div class="benefit-card" onclick="showCanjear('🥤 Botella de agua', 400)">
+      <div class="benefit-card" onclick="selectBeneficio('🥤 Botella de agua', 400)">
         <div class="benefit-icon-wrap">🥤</div>
         <div class="benefit-info">
           <div class="benefit-name">Botella de agua</div>
@@ -893,7 +1074,7 @@
         <div class="benefit-cost">400 pts</div>
       </div>
 
-      <div class="benefit-card" onclick="showCanjear('🎟️ Mes gratis', 5000)">
+      <div class="benefit-card" onclick="selectBeneficio('🎟️ 1 mes gratis', 5000)">
         <div class="benefit-icon-wrap">🎟️</div>
         <div class="benefit-info">
           <div class="benefit-name">1 mes gratis</div>
@@ -904,27 +1085,93 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ CLASES ═══════════════════════════════ -->
+  <!-- ════════════ PUNTOS VIDA: ¿Confirmar canje? ════════════ -->
+  <div class="screen" id="screen-canje-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Beneficios</span><span class="sep">›</span><span>Seleccionado</span><span class="sep">›</span><span class="current">¿Confirmar canje?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">🎁</div>
+          <div class="q-text">¿Confirmar<br>canje?</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:16px; width:100%;">
+        <div style="font-size:14px; color:var(--white); font-weight:700; margin-bottom:12px; text-align:center;" id="canje-item-name">Proteína en polvo (1kg)</div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--gray); font-size:13px;">Tus puntos</span>
+          <span style="color:var(--yellow); font-weight:700;" id="canje-saldo">2.450 pts</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--gray); font-size:13px;">Costo</span>
+          <span style="color:var(--white); font-weight:700;" id="canje-cost">- 1.500 pts</span>
+        </div>
+        <div style="height:1px; background:rgba(255,255,255,0.1); margin:10px 0;"></div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--gray); font-size:13px;">Quedarán</span>
+          <span style="color:var(--green-accent); font-weight:700;" id="canje-restante">950 pts</span>
+        </div>
+      </div>
+
+      <div class="decision-actions">
+        <button class="btn-danger" onclick="cancelarCanje()" style="margin-top:0;">No, cancelar</button>
+        <button class="btn-primary" onclick="confirmarCanje()">Sí, confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ PUNTOS VIDA: Descontar puntos y recibir beneficio ════════════ -->
+  <div class="screen" id="screen-canje-exitoso">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="granted-screen">
+      <div class="granted-icon">🎉</div>
+      <div class="granted-title">¡Canje exitoso!</div>
+      <div class="granted-sub">Descontamos los puntos y recibirás tu beneficio en breve.</div>
+      <div style="background:rgba(232,255,71,0.08); border:1px solid rgba(232,255,71,0.2); border-radius:var(--radius-sm); padding:14px; margin-top:16px; width:100%;">
+        <div style="font-size:13px; color:var(--white);" id="exito-canje-item">Proteína en polvo (1kg)</div>
+        <div style="font-size:12px; color:var(--gray); margin-top:4px;">Código: <span class="text-yellow" id="exito-canje-code">FL-2026-A4B7</span></div>
+      </div>
+      <button class="btn-primary" onclick="goto('home')" style="margin-top:16px;">Volver al inicio</button>
+      <button class="btn-secondary" onclick="goto('puntos-beneficios')">Ver más beneficios</button>
+    </div>
+  </div>
+
+  <!-- ════════════ CLASES: Ver catálogo (virtuales o presenciales) + Opción de filtrado ════════════ -->
   <div class="screen" id="screen-classes">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span class="current">Ver catálogo</span><span class="sep">›</span><span>Filtrar</span><span class="sep">›</span><span>Seleccionar</span><span class="sep">›</span><span>¿Inscribirse?</span></div>
     <div class="top-nav">
       <button class="back-btn" onclick="goto('home')">←</button>
-      <div class="top-nav-title">Clases Virtuales</div>
+      <div class="top-nav-title">Clases</div>
       <div style="width:36px;"></div>
     </div>
     <div class="screen-content">
-      <div class="filter-row">
-        <button class="filter-chip active" onclick="filterClass(this)">Todas</button>
-        <button class="filter-chip" onclick="filterClass(this)">Fuerza</button>
-        <button class="filter-chip" onclick="filterClass(this)">Cardio</button>
-        <button class="filter-chip" onclick="filterClass(this)">Yoga</button>
-        <button class="filter-chip" onclick="filterClass(this)">HIIT</button>
-        <button class="filter-chip" onclick="filterClass(this)">Pilates</button>
+      <div class="step-title">Ver catálogo de clases</div>
+      <div class="step-sub">Virtuales o presenciales — Filtrá por categoría/nivel (opcional)</div>
+
+      <!-- Filtro tipo -->
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button class="filter-chip active" onclick="filterTipo(this, 'todas')">Todas</button>
+        <button class="filter-chip" onclick="filterTipo(this, 'virtual')">🎥 Virtuales</button>
+        <button class="filter-chip" onclick="filterTipo(this, 'presencial')">📍 Presenciales</button>
       </div>
 
-      <div class="class-card" onclick="showClassDetail('Full Body HIIT', 'HIIT', '45 min', 'Intermedio')">
-        <div class="class-thumb" style="background: linear-gradient(135deg, #1A3A2A, #2D5A3D);">
-          🔥
+      <!-- Filtro categoría/nivel -->
+      <div class="filter-row">
+        <button class="filter-chip active" onclick="filterCat(this)">Todas</button>
+        <button class="filter-chip" onclick="filterCat(this)">Fuerza</button>
+        <button class="filter-chip" onclick="filterCat(this)">Cardio</button>
+        <button class="filter-chip" onclick="filterCat(this)">Yoga</button>
+        <button class="filter-chip" onclick="filterCat(this)">HIIT</button>
+        <button class="filter-chip" onclick="filterCat(this)">Principiante</button>
+        <button class="filter-chip" onclick="filterCat(this)">Avanzado</button>
+      </div>
+
+      <!-- Catálogo -->
+      <div class="class-card" onclick="goto('class-detail', 'Full Body HIIT|HIIT|Virtual|45 min|Intermedio|🔥')">
+        <div class="class-thumb" style="background: linear-gradient(135deg, #1A3A2A, #2D5A3D);">🔥
+          <div class="class-tipo-badge">🎥 Virtual</div>
           <div class="class-badge">HIIT</div>
         </div>
         <div class="class-body">
@@ -932,14 +1179,14 @@
           <div class="class-meta">
             <div class="class-meta-item">⏱ 45 min</div>
             <div class="class-meta-item">📊 Intermedio</div>
-            <div class="class-meta-item">👤 12 inscriptos</div>
+            <div class="class-meta-item">👤 12 insc.</div>
           </div>
         </div>
       </div>
 
-      <div class="class-card" onclick="showClassDetail('Yoga Restore', 'Yoga', '60 min', 'Principiante')">
-        <div class="class-thumb" style="background: linear-gradient(135deg, #1A2A3A, #2D3A5A);">
-          🧘
+      <div class="class-card" onclick="goto('class-detail', 'Yoga Restore|Yoga|Presencial|60 min|Principiante|🧘')">
+        <div class="class-thumb" style="background: linear-gradient(135deg, #1A2A3A, #2D3A5A);">🧘
+          <div class="class-tipo-badge">📍 Presencial</div>
           <div class="class-badge">Yoga</div>
         </div>
         <div class="class-body">
@@ -947,14 +1194,14 @@
           <div class="class-meta">
             <div class="class-meta-item">⏱ 60 min</div>
             <div class="class-meta-item">📊 Principiante</div>
-            <div class="class-meta-item">👤 8 inscriptos</div>
+            <div class="class-meta-item">👤 8 insc.</div>
           </div>
         </div>
       </div>
 
-      <div class="class-card" onclick="showClassDetail('Strength & Power', 'Fuerza', '50 min', 'Avanzado')">
-        <div class="class-thumb" style="background: linear-gradient(135deg, #2A1A1A, #5A2D2D);">
-          💪
+      <div class="class-card" onclick="goto('class-detail', 'Strength & Power|Fuerza|Presencial|50 min|Avanzado|💪')">
+        <div class="class-thumb" style="background: linear-gradient(135deg, #2A1A1A, #5A2D2D);">💪
+          <div class="class-tipo-badge">📍 Presencial</div>
           <div class="class-badge">Fuerza</div>
         </div>
         <div class="class-body">
@@ -962,14 +1209,14 @@
           <div class="class-meta">
             <div class="class-meta-item">⏱ 50 min</div>
             <div class="class-meta-item">📊 Avanzado</div>
-            <div class="class-meta-item">👤 5 inscriptos</div>
+            <div class="class-meta-item">👤 5 insc.</div>
           </div>
         </div>
       </div>
 
-      <div class="class-card" onclick="showClassDetail('Cardio Dance', 'Cardio', '40 min', 'Principiante')">
-        <div class="class-thumb" style="background: linear-gradient(135deg, #2A1A3A, #4A2D5A);">
-          💃
+      <div class="class-card" onclick="goto('class-detail', 'Cardio Dance|Cardio|Virtual|40 min|Principiante|💃')">
+        <div class="class-thumb" style="background: linear-gradient(135deg, #2A1A3A, #4A2D5A);">💃
+          <div class="class-tipo-badge">🎥 Virtual</div>
           <div class="class-badge">Cardio</div>
         </div>
         <div class="class-body">
@@ -977,28 +1224,316 @@
           <div class="class-meta">
             <div class="class-meta-item">⏱ 40 min</div>
             <div class="class-meta-item">📊 Principiante</div>
-            <div class="class-meta-item">👤 20 inscriptos</div>
+            <div class="class-meta-item">👤 20 insc.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ SEDES ═══════════════════════════════ -->
+  <!-- ════════════ CLASES: Seleccionar clase (detalle) ════════════ -->
+  <div class="screen" id="screen-class-detail">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Catálogo</span><span class="sep">›</span><span class="current">Clase seleccionada</span><span class="sep">›</span><span>¿Inscribirse?</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('classes')">←</button>
+      <div class="top-nav-title" id="cd-name">Full Body HIIT</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="class-detail-hero" id="cd-hero">🔥</div>
+
+      <div class="class-detail-meta">
+        <span class="yellow" id="cd-cat">HIIT</span>
+        <span id="cd-tipo">🎥 Virtual</span>
+        <span id="cd-dur">⏱ 45 min</span>
+        <span id="cd-nivel">📊 Intermedio</span>
+      </div>
+
+      <p style="color:var(--gray); font-size:14px; line-height:1.6; margin-bottom:24px;">
+        Clase de alta intensidad. Trabajo full body con intervalos cortos de máxima exigencia y descansos activos.
+      </p>
+
+      <button class="btn-primary" onclick="goto('inscribirse-check')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ════════════ CLASES: ¿Desea inscribirse? ════════════ -->
+  <div class="screen" id="screen-inscribirse-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Clase</span><span class="sep">›</span><span class="current">¿Inscribirse?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">📝</div>
+          <div class="q-text">¿Desea<br>inscribirse?</div>
+        </div>
+      </div>
+      <div class="decision-context">¿Querés inscribirte a <span class="text-yellow" id="inscribirse-class-name">Full Body HIIT</span>?</div>
+      <div class="decision-actions">
+        <button class="btn-danger" onclick="goto('volver-salir-check')" style="margin-top:0;">No</button>
+        <button class="btn-primary" onclick="goto('horario')">Sí, inscribirme</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ CLASES: Elegir día y horario disponible ════════════ -->
+  <div class="screen" id="screen-horario">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Inscribirse</span><span class="sep">›</span><span class="current">Elegir día y horario</span><span class="sep">›</span><span>Confirmar</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('inscribirse-check')">←</button>
+      <div class="top-nav-title">Día y horario</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Elegir día y horario</div>
+      <div class="step-sub">Disponibles para los próximos 7 días</div>
+
+      <div class="horario-grid">
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Lun 07:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Lun 19:00</div>
+        <div class="horario-chip unavailable">Mar 07:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Mar 19:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Mié 08:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Mié 19:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Jue 07:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Jue 19:00</div>
+        <div class="horario-chip unavailable">Vie 07:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Vie 19:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Sáb 10:00</div>
+        <div class="horario-chip" onclick="selectHorarioChip(this)">Sáb 11:00</div>
+      </div>
+
+      <button class="btn-primary" id="btn-ir-inscripcion" onclick="goto('proceso-inscripcion')" style="opacity:0.5; pointer-events:none;">Ir al proceso de inscripción →</button>
+    </div>
+  </div>
+
+  <!-- ════════════ CLASES: Proceso de inscripción + Confirmar reserva ════════════ -->
+  <div class="screen" id="screen-proceso-inscripcion">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Horario</span><span class="sep">›</span><span class="current">Confirmar reserva</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('horario')">←</button>
+      <div class="top-nav-title">Confirmar reserva</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Proceso de inscripción</div>
+      <div class="step-sub">Revisá los datos antes de confirmar</div>
+
+      <div style="background:rgba(255,255,255,0.05); border-radius:var(--radius); padding:18px; margin-bottom:20px;">
+        <div style="font-size:12px; color:var(--gray); margin-bottom:4px;">Clase</div>
+        <div style="font-size:16px; font-weight:700; color:var(--white); margin-bottom:12px;" id="conf-class">Full Body HIIT</div>
+
+        <div style="font-size:12px; color:var(--gray); margin-bottom:4px;">Día y horario</div>
+        <div style="font-size:16px; font-weight:700; color:var(--yellow); margin-bottom:12px;" id="conf-horario">Lun 19:00</div>
+
+        <div style="font-size:12px; color:var(--gray); margin-bottom:4px;">Duración</div>
+        <div style="font-size:14px; color:var(--white);" id="conf-dur">45 min</div>
+      </div>
+
+      <button class="btn-primary" onclick="confirmarReserva()">Confirmar reserva ✓</button>
+      <button class="btn-secondary" onclick="goto('horario')">Cambiar horario</button>
+    </div>
+  </div>
+
+  <!-- ════════════ CLASES: Reserva confirmada ════════════ -->
+  <div class="screen" id="screen-reserva-confirmada">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="granted-screen">
+      <div class="granted-icon">✓</div>
+      <div class="granted-title">Reserva confirmada</div>
+      <div class="granted-sub">Te enviamos los detalles de la inscripción a tu mail.</div>
+      <div style="background:rgba(232,255,71,0.08); border:1px solid rgba(232,255,71,0.2); border-radius:var(--radius-sm); padding:14px; margin-top:16px; width:100%;">
+        <div style="font-size:13px; color:var(--white);" id="rc-class">Full Body HIIT</div>
+        <div style="font-size:12px; color:var(--yellow); margin-top:4px;" id="rc-horario">Lun 19:00</div>
+      </div>
+      <button class="btn-primary" onclick="goto('home')" style="margin-top:16px;">Volver al inicio</button>
+    </div>
+  </div>
+
+  <!-- ════════════ CLASES: ¿Volver al catálogo o salir? ════════════ -->
+  <div class="screen" id="screen-volver-salir-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>No te inscribiste</span><span class="sep">›</span><span class="current">¿Volver al catálogo o salir?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">↩️</div>
+          <div class="q-text">¿Volver al<br>catálogo o<br>salir?</div>
+        </div>
+      </div>
+      <div class="decision-context">Decidiste no inscribirte. ¿Qué querés hacer?</div>
+      <div class="decision-actions">
+        <button class="btn-secondary" onclick="goto('home')" style="margin-top:0;">Salir</button>
+        <button class="btn-primary" onclick="goto('classes')">Volver al catálogo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ RUTINAS: Ver rutinas personalizadas + Elegir en base a objetivos ════════════ -->
+  <div class="screen" id="screen-routines">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span class="current">Ver rutinas personalizadas</span><span class="sep">›</span><span>Elegir en base a objetivos</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('home')">←</button>
+      <div class="top-nav-title">Rutinas</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Ver rutinas personalizadas</div>
+      <div class="step-sub">Elegí en base a tus objetivos</div>
+
+      <div class="objective-grid">
+        <div class="objective-card" onclick="filterRoutine(this, 'perder')">
+          <div class="obj-icon">🔥</div>
+          <div class="obj-label">Perder peso</div>
+        </div>
+        <div class="objective-card selected" onclick="filterRoutine(this, 'musculo')">
+          <div class="obj-icon">💪</div>
+          <div class="obj-label">Ganar músculo</div>
+        </div>
+        <div class="objective-card" onclick="filterRoutine(this, 'rendimiento')">
+          <div class="obj-icon">⚡</div>
+          <div class="obj-label">Rendimiento</div>
+        </div>
+        <div class="objective-card" onclick="filterRoutine(this, 'flexibilidad')">
+          <div class="obj-icon">🧘</div>
+          <div class="obj-label">Flexibilidad</div>
+        </div>
+      </div>
+
+      <div class="routine-card" onclick="showAlert('Rutina iniciada 💪', 'success')">
+        <div class="routine-name">💪 Fuerza — Tren Superior</div>
+        <div class="routine-obj">Ganar músculo</div>
+        <div class="routine-exercises">Press de banca · Pull-ups · Remo · Curl de bíceps · 4 más</div>
+        <div style="margin-top:10px; font-size:12px; color:var(--gray);">8 ejercicios · 45 min · Intermedio</div>
+      </div>
+
+      <div class="routine-card" onclick="showAlert('Rutina iniciada 🔥', 'success')">
+        <div class="routine-name">🔥 HIIT — 20 min</div>
+        <div class="routine-obj">Perder peso</div>
+        <div class="routine-exercises">Burpees · Saltos · Mountain climbers · Sprint · 2 más</div>
+        <div style="margin-top:10px; font-size:12px; color:var(--gray);">6 ejercicios · 20 min · Avanzado</div>
+      </div>
+
+      <div class="routine-card" onclick="showAlert('Rutina iniciada 🧘', 'success')">
+        <div class="routine-name">🧘 Movilidad</div>
+        <div class="routine-obj">Flexibilidad</div>
+        <div class="routine-exercises">Estiramiento · Movilidad de cadera · Yoga flows · 4 más</div>
+        <div style="margin-top:10px; font-size:12px; color:var(--gray);">7 ejercicios · 30 min · Principiante</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ QR: Generar QR + Verificación Biométrica ════════════ -->
+  <div class="screen" id="screen-qr-bio">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Generar QR</span><span class="sep">›</span><span class="current">Verificación biométrica</span><span class="sep">›</span><span>X</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('home')">←</button>
+      <div class="top-nav-title">QR de acceso</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+      <div class="step-title">Generar QR de acceso a sedes</div>
+      <div class="step-sub">Verificación biométrica del usuario</div>
+
+      <div class="bio-icon-big" id="bio-icon">👆</div>
+
+      <div id="bio-state-init">
+        <p style="color:var(--white); font-size:15px; font-weight:600; margin-bottom:20px;">Tocá para escanear tu huella</p>
+        <button class="btn-primary" onclick="startBio()" style="max-width:280px;">Iniciar verificación</button>
+      </div>
+
+      <div id="bio-state-checking" style="display:none;">
+        <p style="color:var(--gray); font-size:14px;">Verificando...</p>
+        <div class="spinner" style="margin: 16px auto; width:40px; height:40px; border-width:3px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ QR: DECISIÓN — Resultado biométrico (X) ════════════ -->
+  <div class="screen" id="screen-qr-x-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Bio</span><span class="sep">›</span><span class="current">X (resultado)</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">🔍</div>
+          <div class="q-text">¿Verificación<br>exitosa?</div>
+        </div>
+      </div>
+      <div class="decision-context">Procesando verificación biométrica...</div>
+      <div class="spinner" style="margin: 0 auto;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════ QR: DECISIÓN — ¿Reintentar? (fallida) ════════════ -->
+  <div class="screen" id="screen-qr-reintentar">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Verificación fallida</span><span class="sep">›</span><span class="current">¿Reintentar?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond" style="border-color:rgba(255,68,68,0.4); background: linear-gradient(135deg, rgba(255,68,68,0.15), rgba(255,68,68,0.05));">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">❌</div>
+          <div class="q-text">¿Reintentar?</div>
+        </div>
+      </div>
+      <div class="decision-context">La verificación biométrica falló. ¿Querés intentar de nuevo?</div>
+      <div class="decision-actions">
+        <button class="btn-danger" onclick="goto('home')" style="margin-top:0;">No</button>
+        <button class="btn-primary" onclick="goto('qr-bio')">Sí, reintentar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ QR: Mostrar QR (Válido por 5 minutos) ════════════ -->
+  <div class="screen" id="screen-qr-show">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Bio exitosa</span><span class="sep">›</span><span class="current">Mostrar QR</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('home')">←</button>
+      <div class="top-nav-title">QR de acceso</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content" style="text-align:center;">
+      <div class="step-title" style="text-align:center;">Mostrar QR</div>
+      <div class="step-sub" style="text-align:center;">Presentá este código en el lector de la sede</div>
+
+      <div class="qr-box"><div class="qr-inner"></div></div>
+
+      <div class="qr-timer">
+        <div class="qr-timer-dot"></div>
+        <span>Válido por <span id="qr-countdown">5:00</span></span>
+      </div>
+
+      <div class="qr-valid-badge">⏱ Válido por 5 minutos</div>
+
+      <p style="color:var(--gray); font-size:12px; margin-top:24px;">El código expira automáticamente por seguridad</p>
+    </div>
+  </div>
+
+  <!-- ════════════ SEDES: Ver mapa con sedes disponibles ════════════ -->
   <div class="screen" id="screen-sedes">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span class="current">Ver mapa</span><span class="sep">›</span><span>Seleccionar sede</span><span class="sep">›</span><span>Consultar detalles</span></div>
     <div class="top-nav">
       <button class="back-btn" onclick="goto('home')">←</button>
       <div class="top-nav-title">Sedes</div>
       <div style="width:36px;"></div>
     </div>
     <div class="screen-content">
-      <div style="background:rgba(255,255,255,0.05); border-radius:var(--radius); height:140px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; border:1.5px solid rgba(255,255,255,0.08);">
+      <div class="step-title">Ver mapa con sedes disponibles</div>
+      <div class="step-sub">Seleccioná una sede para consultar detalles</div>
+
+      <div class="map-placeholder">
         <span style="font-size:40px;">🗺️</span>
-        <span style="color:var(--gray); font-size:14px; margin-left:12px;">Mapa de sedes</span>
+        <span style="color:var(--gray); font-size:13px;">Mapa interactivo de sedes</span>
       </div>
 
-      <div class="sede-card" onclick="showSedeDetail('Palermo', 'Honduras 4523', true)">
+      <div class="sede-card" onclick="selectSede('Palermo', 'Honduras 4523', true)">
         <div class="sede-card-top">
           <div class="sede-name">FitLife Palermo</div>
           <div class="sede-open open">Abierto</div>
@@ -1006,12 +1541,12 @@
         <div class="sede-address">📍 Honduras 4523, CABA</div>
         <div class="sede-info-row">
           <div class="sede-info-item">🕐 6:00 - 23:00</div>
-          <div class="sede-info-item">👥 Afluencia media</div>
+          <div class="sede-info-item">👥 Media</div>
           <div class="sede-info-item">⭐ 4.8</div>
         </div>
       </div>
 
-      <div class="sede-card" onclick="showSedeDetail('Belgrano', 'Av. Monroe 2101', true)">
+      <div class="sede-card" onclick="selectSede('Belgrano', 'Av. Monroe 2101', true)">
         <div class="sede-card-top">
           <div class="sede-name">FitLife Belgrano</div>
           <div class="sede-open open">Abierto</div>
@@ -1019,12 +1554,12 @@
         <div class="sede-address">📍 Av. Monroe 2101, CABA</div>
         <div class="sede-info-row">
           <div class="sede-info-item">🕐 6:00 - 22:00</div>
-          <div class="sede-info-item">👥 Afluencia baja</div>
+          <div class="sede-info-item">👥 Baja</div>
           <div class="sede-info-item">⭐ 4.6</div>
         </div>
       </div>
 
-      <div class="sede-card" onclick="showSedeDetail('Microcentro', 'Av. Corrientes 1285', false)">
+      <div class="sede-card" onclick="selectSede('Microcentro', 'Av. Corrientes 1285', false)">
         <div class="sede-card-top">
           <div class="sede-name">FitLife Microcentro</div>
           <div class="sede-open closed">Cerrado</div>
@@ -1039,163 +1574,422 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ RESERVAS ═══════════════════════════════ -->
-  <div class="screen" id="screen-reservas">
+  <!-- ════════════ SEDES: Consultar detalles (3 opciones) ════════════ -->
+  <div class="screen" id="screen-sede-detail">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Sede</span><span class="sep">›</span><span class="current">Consultar detalles</span></div>
     <div class="top-nav">
-      <button class="back-btn" onclick="goto('home')">←</button>
-      <div class="top-nav-title">Mis Reservas</div>
+      <button class="back-btn" onclick="goto('sedes')">←</button>
+      <div class="top-nav-title" id="sd-name">FitLife Palermo</div>
       <div style="width:36px;"></div>
     </div>
     <div class="screen-content">
-      <button class="btn-primary mb-16" onclick="showNuevaReserva()">+ Nueva reserva</button>
+      <div class="step-title">Consultar detalles</div>
+      <div class="step-sub" id="sd-address">📍 Honduras 4523, CABA</div>
 
-      <div class="section-title" style="padding:0 0 12px;">Reservas activas</div>
-
-      <div class="reserva-card">
-        <div class="reserva-card-top">
-          <div class="reserva-machine">🏋️ Cinta de correr #3</div>
-          <div class="reserva-status">Confirmada</div>
+      <div class="detail-option" onclick="goto('sede-direccion')">
+        <div class="detail-option-icon">📍</div>
+        <div class="detail-option-text">
+          <div class="detail-option-title">Ver Dirección</div>
+          <div class="detail-option-sub">Cómo llegar — Navegación GPS</div>
         </div>
-        <div class="reserva-meta">📍 Palermo · Hoy 18:00 - 18:45</div>
-        <div class="reserva-actions">
-          <button class="btn-sm btn-sm-outline" onclick="showAlert('Reserva modificada', 'success')">Modificar</button>
-          <button class="btn-sm btn-sm-danger" onclick="showAlert('Reserva cancelada', 'error')">Cancelar</button>
-        </div>
+        <span style="color:var(--yellow);">→</span>
       </div>
 
-      <div class="reserva-card">
-        <div class="reserva-card-top">
-          <div class="reserva-machine">🚴 Bicicleta estática #7</div>
-          <div class="reserva-status">Confirmada</div>
+      <div class="detail-option" onclick="goto('sede-horarios')">
+        <div class="detail-option-icon">🕐</div>
+        <div class="detail-option-text">
+          <div class="detail-option-title">Ver Horarios</div>
+          <div class="detail-option-sub">Cuando la sede está abierta</div>
         </div>
-        <div class="reserva-meta">📍 Belgrano · Mañana 09:00 - 09:45</div>
-        <div class="reserva-actions">
-          <button class="btn-sm btn-sm-outline" onclick="showAlert('Reserva modificada', 'success')">Modificar</button>
-          <button class="btn-sm btn-sm-danger" onclick="showAlert('Reserva cancelada', 'error')">Cancelar</button>
-        </div>
+        <span style="color:var(--yellow);">→</span>
       </div>
 
-      <div style="text-align:center; padding:20px 0; color:var(--gray); font-size:14px;">
-        No tenés más reservas próximas
+      <div class="detail-option" onclick="goto('sede-otros')">
+        <div class="detail-option-icon">ℹ️</div>
+        <div class="detail-option-text">
+          <div class="detail-option-title">Ver Otros Detalles</div>
+          <div class="detail-option-sub">Equipamiento, concurrencia, etc.</div>
+        </div>
+        <span style="color:var(--yellow);">→</span>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ RUTINAS ═══════════════════════════════ -->
-  <div class="screen" id="screen-routines">
+  <!-- ════════════ SEDES: Ver Dirección ════════════ -->
+  <div class="screen" id="screen-sede-direccion">
     <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Detalles</span><span class="sep">›</span><span>Dirección</span><span class="sep">›</span><span class="current">¿Ir a la sede?</span></div>
     <div class="top-nav">
-      <button class="back-btn" onclick="goto('home')">←</button>
-      <div class="top-nav-title">Rutinas</div>
+      <button class="back-btn" onclick="goto('sede-detail')">←</button>
+      <div class="top-nav-title">Ver Dirección</div>
       <div style="width:36px;"></div>
     </div>
     <div class="screen-content">
-      <p style="color:var(--gray); font-size:14px; margin-bottom:20px;">Rutinas personalizadas según tus objetivos</p>
+      <div class="step-title">Ver Dirección</div>
 
-      <div class="routine-card" onclick="showAlert('Rutina iniciada 💪', 'success')">
-        <div class="routine-name">💪 Fuerza — Tren Superior</div>
-        <div class="routine-obj">Ganar músculo</div>
-        <div class="routine-exercises">Press de banca · Pull-ups · Remo con barra · Curl de bíceps · Tríceps polea · 3 ejercicios más</div>
-        <div style="margin-top:10px; font-size:12px; color:var(--gray);">8 ejercicios · 45 min · Intermedio</div>
+      <div class="map-placeholder" style="height:200px;">
+        <span style="font-size:48px;">📍</span>
+        <span style="color:var(--gray); font-size:13px;" id="sd-dir-text">Honduras 4523, CABA</span>
       </div>
 
-      <div class="routine-card" onclick="showAlert('Rutina iniciada 🔥', 'success')">
-        <div class="routine-name">🔥 Cardio — HIIT 20 min</div>
-        <div class="routine-obj">Perder peso</div>
-        <div class="routine-exercises">Burpees · Saltos · Mountain climbers · Sprint en cinta · 2 ejercicios más</div>
-        <div style="margin-top:10px; font-size:12px; color:var(--gray);">6 ejercicios · 20 min · Avanzado</div>
+      <div class="info-box">
+        <div class="info-box-title">Dirección completa</div>
+        <div class="info-box-content" id="sd-dir-full">Honduras 4523, Palermo, CABA, Argentina</div>
       </div>
 
-      <div class="routine-card" onclick="showAlert('Rutina iniciada 🧘', 'success')">
-        <div class="routine-name">🧘 Movilidad y Flexibilidad</div>
-        <div class="routine-obj">Rendimiento</div>
-        <div class="routine-exercises">Estiramiento dinámico · Movilidad de cadera · Yoga flows · 4 ejercicios más</div>
-        <div style="margin-top:10px; font-size:12px; color:var(--gray);">7 ejercicios · 30 min · Principiante</div>
+      <div class="info-box">
+        <div class="info-box-title">Cómo llegar</div>
+        <div class="info-box-content">🚇 Subte D — Plaza Italia (5 min)<br>🚌 Colectivos 39, 152, 161<br>🚗 Estacionamiento gratuito</div>
+      </div>
+
+      <button class="btn-primary" onclick="goto('sede-ir-check')">¿Desea ir a la sede?</button>
+    </div>
+  </div>
+
+  <!-- ════════════ SEDES: ¿Desea ir a la sede? ════════════ -->
+  <div class="screen" id="screen-sede-ir-check">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Dirección</span><span class="sep">›</span><span class="current">¿Desea ir a la sede?</span></div>
+    <div class="decision-screen">
+      <div class="decision-diamond">
+        <div class="decision-diamond-inner">
+          <div class="q-icon">🗺️</div>
+          <div class="q-text">¿Desea ir<br>a la sede?</div>
+        </div>
+      </div>
+      <div class="decision-context">Si querés ir ahora, abrimos la navegación GPS</div>
+      <div class="decision-actions">
+        <button class="btn-secondary" onclick="goto('home')" style="margin-top:0;">No</button>
+        <button class="btn-primary" onclick="goto('sede-gps')">Sí, abrir GPS</button>
       </div>
     </div>
   </div>
 
-</div><!-- end phone-frame -->
+  <!-- ════════════ SEDES: Abrir navegación GPS ════════════ -->
+  <div class="screen" id="screen-sede-gps">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="granted-screen">
+      <div class="bio-icon-big" style="background:rgba(91,163,245,0.1); border-color:var(--blue);">🗺️</div>
+      <div class="granted-title" style="color:var(--blue);">Abriendo GPS</div>
+      <div class="granted-sub">Iniciando navegación a la sede seleccionada...</div>
+      <div class="spinner" style="margin: 16px auto; width:40px; height:40px; border-width:3px;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════ SEDES: Ver Horarios ════════════ -->
+  <div class="screen" id="screen-sede-horarios">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Detalles</span><span class="sep">›</span><span class="current">Ver Horarios</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('sede-detail')">←</button>
+      <div class="top-nav-title">Ver Horarios</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Consultar horarios</div>
+      <div class="step-sub">Cuando la sede está abierta</div>
+
+      <div class="info-box">
+        <div class="info-box-title">Lunes a Viernes</div>
+        <div class="info-box-content">6:00 - 23:00</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-title">Sábado</div>
+        <div class="info-box-content">8:00 - 20:00</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-title">Domingo</div>
+        <div class="info-box-content">9:00 - 18:00</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-title">Feriados</div>
+        <div class="info-box-content">9:00 - 14:00 (consultar en redes)</div>
+      </div>
+
+      <button class="btn-secondary" onclick="goto('sede-detail')">Volver</button>
+    </div>
+  </div>
+
+  <!-- ════════════ SEDES: Ver Otros Detalles ════════════ -->
+  <div class="screen" id="screen-sede-otros">
+    <div class="status-bar"><span>9:41</span><div class="status-icons">▲ ● ▮▮▮</div></div>
+    <div class="step-trail"><span>Detalles</span><span class="sep">›</span><span class="current">Otros Detalles</span></div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="goto('sede-detail')">←</button>
+      <div class="top-nav-title">Otros Detalles</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="screen-content">
+      <div class="step-title">Consultar otros detalles</div>
+      <div class="step-sub">Equipamiento, nivel de concurrencia, etc.</div>
+
+      <div class="info-box">
+        <div class="info-box-title">Equipamiento disponible</div>
+        <div class="info-box-content">🏋️ 40 máquinas de fuerza<br>🚴 20 bicicletas estáticas<br>🏃 15 cintas de correr<br>🧘 Sala de clases grupales<br>🏊 Pileta climatizada</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">Nivel de concurrencia (en vivo)</div>
+        <div class="info-box-content">👥 Afluencia media — 62% de capacidad<br><span style="color:var(--green-accent); font-size:13px;">Buen momento para entrenar</span></div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">Servicios</div>
+        <div class="info-box-content">🚿 Vestuarios con duchas<br>🔒 Lockers personales<br>☕ Bar / Cafetería<br>📶 WiFi gratuito<br>🅿️ Estacionamiento</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">Calificación de usuarios</div>
+        <div class="info-box-content"><span class="text-yellow">⭐⭐⭐⭐⭐ 4.8 / 5</span> · 342 reseñas</div>
+      </div>
+
+      <button class="btn-secondary" onclick="goto('sede-detail')">Volver</button>
+    </div>
+  </div>
+
+</div>
 
 <script>
-  // ─── NAVIGATION ───
-  function goto(screenId) {
+  // ════════ NAVIGATION ════════
+  function goto(screenId, param) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById('screen-' + screenId);
-    if (target) target.classList.add('active');
+    if (target) {
+      target.classList.add('active');
+      target.scrollTop = 0;
+    }
+
+    // Hooks especiales según pantalla
+    if (screenId === 'cuota-check') { setTimeout(checkCuota, 1500); }
+    if (screenId === 'send-mail') { setTimeout(() => goto('confirm-mail'), 1800); }
+    if (screenId === 'processing') { setTimeout(() => goto('pago-exitoso-check'), 2000); }
+    if (screenId === 'pago-exitoso-check') { setTimeout(checkPagoExitoso, 1800); }
+    if (screenId === 'access-granted') { setTimeout(() => goto('home'), 1800); }
+    if (screenId === 'qr-x-check') { setTimeout(checkBioResult, 1500); }
+    if (screenId === 'qr-show') { startQRTimer(); }
+    if (screenId === 'sede-gps') { setTimeout(() => { showAlert('GPS iniciado 🗺️', 'success'); goto('home'); }, 1800); }
+    if (screenId === 'nutrition-detail' && param) { setDietDetail(param); }
+    if (screenId === 'class-detail' && param) { setClassDetail(param); }
   }
 
-  // ─── AUTH ───
-  function switchAuthTab(tab) {
-    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-    document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
-    document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
-  }
+  // ════════ AUTH FLOW ════════
 
+  // Iniciar sesión → Ingresar credenciales → ¿Tiene cuota al día?
   function doLogin() {
     const email = document.getElementById('login-email').value;
     const pass = document.getElementById('login-pass').value;
     if (!email || !pass) { showAlert('Completá todos los campos', 'error'); return; }
-    showAlert('¡Bienvenido de vuelta! 👋', 'success');
-    setTimeout(() => {
-      // Check subscription (simulate paid user)
-      goto('home');
-    }, 1200);
+    window._loginEmail = email;
+    goto('cuota-check');
   }
 
+  function checkCuota() {
+    // Simulación: vencida@test.com tiene cuota vencida
+    const tieneCuota = window._loginEmail !== 'vencida@test.com';
+    if (tieneCuota) {
+      document.getElementById('cuota-result').innerHTML = `
+        <div style="background:rgba(76,175,111,0.15); border:1px solid var(--green-accent); border-radius:var(--radius-sm); padding:14px; text-align:center;">
+          <div style="color:var(--green-accent); font-weight:700; margin-bottom:4px;">✓ Cuota al día</div>
+          <div style="font-size:12px; color:var(--gray);">Acceso concedido — redirigiendo...</div>
+        </div>
+      `;
+      setTimeout(() => goto('access-granted'), 1200);
+    } else {
+      document.getElementById('cuota-result').innerHTML = `
+        <div style="background:rgba(255,68,68,0.15); border:1px solid var(--red); border-radius:var(--radius-sm); padding:14px; text-align:center;">
+          <div style="color:#FF6B6B; font-weight:700; margin-bottom:4px;">✗ Cuota vencida</div>
+          <div style="font-size:12px; color:var(--gray);">Continuando...</div>
+        </div>
+      `;
+      setTimeout(() => goto('renovar-check'), 1200);
+    }
+  }
+
+  // Registro → mail+contraseña → Enviar mail → Confirmar mail → T&C → Plan → ¿Pagar?
   function doRegister() {
     const name = document.getElementById('reg-name').value;
     const email = document.getElementById('reg-email').value;
     const pass = document.getElementById('reg-pass').value;
     if (!name || !email || !pass) { showAlert('Completá todos los campos', 'error'); return; }
+    document.getElementById('sent-mail-addr').textContent = email;
+    document.getElementById('confirm-mail-addr').textContent = email;
     const nameParts = name.trim().split(' ');
     document.getElementById('home-username').innerHTML = nameParts[0] + (nameParts[1] ? ' <span>' + nameParts[1] + '</span>' : '');
-    showAlert('Cuenta creada 🎉', 'success');
-    setTimeout(() => goto('subscription'), 1200);
+    goto('send-mail');
   }
 
-  function selectPlan(plan) {
-    showAlert('Plan ' + plan + ' seleccionado ✓', 'success');
-    setTimeout(() => showPaymentModal(plan), 500);
+  // Firmar T&C
+  function doSignTerms() {
+    if (!document.getElementById('terms-accept').checked) {
+      showAlert('Debés aceptar los términos', 'error');
+      return;
+    }
+    goto('plan');
   }
 
-  function showPaymentModal(plan) {
-    openModal(`
-      <div class="modal-title">Elegí método de pago</div>
-      <div class="modal-sub">Plan ${plan} — confirmá tu pago</div>
-      <div class="benefit-card" style="cursor:pointer; margin-bottom:10px;" onclick="procesarPago('Tarjeta de crédito')">
-        <div class="benefit-icon-wrap">💳</div>
-        <div class="benefit-info"><div class="benefit-name">Tarjeta de crédito/débito</div></div>
-      </div>
-      <div class="benefit-card" style="cursor:pointer;" onclick="procesarPago('Transferencia bancaria')">
-        <div class="benefit-icon-wrap">🏦</div>
-        <div class="benefit-info"><div class="benefit-name">Transferencia bancaria</div></div>
-      </div>
-    `);
+  // Elegir plan
+  let _selectedPlan = null;
+  function selectPlan(el, plan, price) {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    _selectedPlan = { plan, price };
+    document.getElementById('pagar-plan-label').textContent = plan;
+    document.getElementById('payment-plan-label').textContent = plan + ' — ' + price + '/mes';
+    document.getElementById('home-plan-label').textContent = 'Plan ' + plan + ' activo';
+    const btn = document.getElementById('btn-continue-plan');
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
   }
 
+  // ¿Pagar? → Elegir método → Procesar → ¿Exitoso?
+  let _lastPaymentMethod = '';
   function procesarPago(metodo) {
-    closeModal();
-    showAlert('Pago procesado con ' + metodo + ' ✓', 'success');
-    setTimeout(() => goto('home'), 1400);
+    _lastPaymentMethod = metodo;
+    document.getElementById('processing-method-label').textContent = metodo;
+    goto('processing');
   }
 
-  // ─── QR ───
+  function checkPagoExitoso() {
+    // Simulación: MercadoPago = fallo
+    const exitoso = _lastPaymentMethod !== 'MercadoPago';
+    if (exitoso) {
+      goto('access-granted');
+    } else {
+      goto('reintentar-check');
+    }
+  }
+
+  // ════════ NUTRICION ════════
+  function selectNutObj(el, key, label) {
+    document.querySelectorAll('#screen-nutrition .objective-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    showAlert('Objetivo: ' + label, 'success');
+  }
+
+  function setDietDetail(name) {
+    const data = {
+      'Mediterránea': { cal: '1.800 kcal', emoji: '🫒' },
+      'Alta en proteínas': { cal: '2.200 kcal', emoji: '🥩' },
+      'Plant-based': { cal: '1.600 kcal', emoji: '🌱' }
+    };
+    const d = data[name] || data['Mediterránea'];
+    document.getElementById('diet-detail-title').textContent = name;
+    document.getElementById('diet-detail-cal').textContent = d.cal;
+    document.getElementById('diet-detail-emoji').textContent = d.emoji;
+  }
+
+  // ════════ PUNTOS VIDA ════════
+  let currentPoints = 2450;
+  let _canjeItem = null;
+  let _canjeCost = 0;
+
+  function selectBeneficio(name, cost) {
+    _canjeItem = name;
+    _canjeCost = cost;
+    document.getElementById('canje-item-name').textContent = name;
+    document.getElementById('canje-saldo').textContent = currentPoints.toLocaleString() + ' pts';
+    document.getElementById('canje-cost').textContent = '- ' + cost.toLocaleString() + ' pts';
+    document.getElementById('canje-restante').textContent = (currentPoints - cost).toLocaleString() + ' pts';
+    if (currentPoints < cost) {
+      showAlert('No tenés suficientes puntos', 'error');
+      return;
+    }
+    goto('canje-check');
+  }
+
+  function confirmarCanje() {
+    currentPoints -= _canjeCost;
+    document.getElementById('display-points-saldo').textContent = currentPoints.toLocaleString();
+    document.getElementById('display-points-corner').textContent = currentPoints.toLocaleString() + ' pts';
+    document.getElementById('home-points').textContent = currentPoints.toLocaleString();
+    document.getElementById('exito-canje-item').textContent = _canjeItem;
+    document.getElementById('exito-canje-code').textContent = 'FL-2026-' + Math.random().toString(36).substring(2,6).toUpperCase();
+    goto('canje-exitoso');
+  }
+
+  function cancelarCanje() {
+    showAlert('Canje cancelado', 'error');
+    goto('puntos-beneficios');
+  }
+
+  // ════════ CLASES ════════
+  function filterTipo(btn, tipo) {
+    btn.parentElement.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function filterCat(btn) {
+    document.querySelectorAll('.filter-row .filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setClassDetail(param) {
+    const [name, cat, tipo, dur, nivel, emoji] = param.split('|');
+    document.getElementById('cd-name').textContent = name;
+    document.getElementById('cd-cat').textContent = cat;
+    document.getElementById('cd-tipo').textContent = tipo === 'Virtual' ? '🎥 Virtual' : '📍 Presencial';
+    document.getElementById('cd-dur').textContent = '⏱ ' + dur;
+    document.getElementById('cd-nivel').textContent = '📊 ' + nivel;
+    document.getElementById('cd-hero').textContent = emoji;
+    document.getElementById('inscribirse-class-name').textContent = name;
+    document.getElementById('conf-class').textContent = name;
+    document.getElementById('conf-dur').textContent = dur;
+    document.getElementById('rc-class').textContent = name;
+  }
+
+  let _selectedHorario = '';
+  function selectHorarioChip(el) {
+    document.querySelectorAll('.horario-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    _selectedHorario = el.textContent;
+    document.getElementById('conf-horario').textContent = _selectedHorario;
+    document.getElementById('rc-horario').textContent = _selectedHorario;
+    const btn = document.getElementById('btn-ir-inscripcion');
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  }
+
+  function confirmarReserva() {
+    goto('reserva-confirmada');
+  }
+
+  // ════════ RUTINAS ════════
+  function filterRoutine(el, key) {
+    document.querySelectorAll('#screen-routines .objective-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // ════════ QR ════════
   let qrTimer = null;
-  function startBiometric() {
-    document.getElementById('qr-state-verify').innerHTML = '<div style="font-size:70px; animation:pulse 1s infinite;">📡</div><p style="color:var(--gray); margin-top:12px;">Verificando...</p>';
+  let _bioSuccess = false;
+
+  function startBio() {
+    document.getElementById('bio-state-init').style.display = 'none';
+    document.getElementById('bio-state-checking').style.display = 'block';
+    document.getElementById('bio-icon').textContent = '📡';
     setTimeout(() => {
-      document.getElementById('qr-state-verify').style.display = 'none';
-      document.getElementById('qr-state-show').style.display = 'block';
-      startQRTimer();
+      goto('qr-x-check');
     }, 2000);
+  }
+
+  function checkBioResult() {
+    // Simulación: 70% éxito
+    _bioSuccess = Math.random() > 0.3;
+    if (_bioSuccess) {
+      goto('qr-show');
+    } else {
+      goto('qr-reintentar');
+    }
+    // Reset bio screen
+    document.getElementById('bio-state-init').style.display = 'block';
+    document.getElementById('bio-state-checking').style.display = 'none';
+    document.getElementById('bio-icon').textContent = '👆';
   }
 
   function startQRTimer() {
     let seconds = 300;
     clearInterval(qrTimer);
+    document.getElementById('qr-countdown').textContent = '5:00';
     qrTimer = setInterval(() => {
       seconds--;
       const m = Math.floor(seconds / 60);
@@ -1203,194 +1997,24 @@
       document.getElementById('qr-countdown').textContent = m + ':' + (s < 10 ? '0' : '') + s;
       if (seconds <= 0) {
         clearInterval(qrTimer);
-        document.getElementById('qr-state-show').style.display = 'none';
-        document.getElementById('qr-state-verify').style.display = 'block';
-        document.getElementById('qr-state-verify').innerHTML = `
-          <p style="color:var(--white); margin-bottom:20px; font-size:15px;">Se requiere verificación biométrica</p>
-          <div style="font-size:80px; margin-bottom:20px;">👆</div>
-          <button class="btn-primary" onclick="startBiometric()" style="width:220px;">Verificar huella digital</button>
-        `;
+        showAlert('QR expirado — verificá de nuevo', 'error');
+        goto('qr-bio');
       }
     }, 1000);
   }
 
-  // ─── NUTRICION ───
-  function selectObjective(el, obj) {
-    document.querySelectorAll('.objective-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    const labels = { deficit: 'Perder peso', mantenimiento: 'Mantenerme', volumen: 'Ganar músculo', rendimiento: 'Rendimiento' };
-    showAlert('Objetivo: ' + labels[obj], 'success');
+  // ════════ SEDES ════════
+  let _selectedSede = null;
+  function selectSede(name, address, isOpen) {
+    _selectedSede = { name, address, isOpen };
+    document.getElementById('sd-name').textContent = 'FitLife ' + name;
+    document.getElementById('sd-address').textContent = '📍 ' + address + ', CABA';
+    document.getElementById('sd-dir-text').textContent = address + ', CABA';
+    document.getElementById('sd-dir-full').textContent = address + ', ' + name + ', CABA, Argentina';
+    goto('sede-detail');
   }
 
-  function showDietDetail(name, kcal, desc) {
-    openModal(`
-      <div class="modal-title">${name}</div>
-      <div class="modal-sub">${kcal} por día</div>
-      <p style="color:var(--gray); font-size:14px; line-height:1.6; margin-bottom:20px;">${desc}</p>
-      <div class="divider"></div>
-      <p style="color:var(--white); font-size:14px; font-weight:600; margin-bottom:12px;">Comida sugerida hoy:</p>
-      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin-bottom:10px;">
-        <div style="font-size:13px; color:var(--white); font-weight:600;">🌅 Desayuno</div>
-        <div style="font-size:12px; color:var(--gray); margin-top:4px;">Avena con frutas y proteína en polvo</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin-bottom:10px;">
-        <div style="font-size:13px; color:var(--white); font-weight:600;">☀️ Almuerzo</div>
-        <div style="font-size:12px; color:var(--gray); margin-top:4px;">Pollo grillado con quinoa y vegetales</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin-bottom:20px;">
-        <div style="font-size:13px; color:var(--white); font-weight:600;">🌙 Cena</div>
-        <div style="font-size:12px; color:var(--gray); margin-top:4px;">Salmón con batata y espinaca</div>
-      </div>
-      <button class="btn-primary" onclick="closeModal(); showAlert('Plan guardado ✓', 'success')">Guardar este plan</button>
-    `);
-  }
-
-  // ─── VIDA PUNTOS ───
-  function showCanjear(benefit, cost) {
-    const balance = 2450;
-    const canCanjear = balance >= cost;
-    openModal(`
-      <div class="modal-title">Canjear beneficio</div>
-      <div class="modal-sub">${benefit}</div>
-      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:16px; margin-bottom:20px;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-          <span style="color:var(--gray); font-size:13px;">Tus puntos</span>
-          <span style="color:var(--yellow); font-weight:700;">${balance.toLocaleString()} pts</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-          <span style="color:var(--gray); font-size:13px;">Costo del canje</span>
-          <span style="color:var(--white); font-weight:700;">${cost.toLocaleString()} pts</span>
-        </div>
-        <div style="height:1px; background:rgba(255,255,255,0.1); margin:12px 0;"></div>
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:var(--gray); font-size:13px;">Puntos restantes</span>
-          <span style="color:${canCanjear ? 'var(--green-accent)' : 'var(--red)'}; font-weight:700;">${(balance - cost).toLocaleString()} pts</span>
-        </div>
-      </div>
-      ${canCanjear 
-        ? `<button class="btn-primary" onclick="closeModal(); showAlert('¡Beneficio canjeado! 🎉', 'success')">Confirmar canje</button>`
-        : `<div style="text-align:center; color:var(--red); font-size:14px; margin-bottom:16px;">No tenés suficientes puntos</div>
-           <button class="btn-secondary" onclick="closeModal()">Cerrar</button>`
-      }
-    `);
-  }
-
-  // ─── CLASES ───
-  function filterClass(btn) {
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-  }
-
-  function showClassDetail(name, type, duration, level) {
-    openModal(`
-      <div class="modal-title">${name}</div>
-      <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
-        <span style="background:rgba(232,255,71,0.1); color:var(--yellow); font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px;">${type}</span>
-        <span style="background:rgba(255,255,255,0.08); color:var(--white); font-size:12px; padding:4px 12px; border-radius:20px;">⏱ ${duration}</span>
-        <span style="background:rgba(255,255,255,0.08); color:var(--white); font-size:12px; padding:4px 12px; border-radius:20px;">📊 ${level}</span>
-      </div>
-      <p style="color:var(--gray); font-size:14px; line-height:1.6; margin-bottom:20px;">
-        Clase en vivo con instructor certificado. Sesión grabada disponible por 7 días.
-      </p>
-      <div style="color:var(--white); font-size:14px; font-weight:600; margin-bottom:12px;">Elegí día y horario:</div>
-      <div class="horario-grid">
-        <div class="horario-chip" onclick="selectHorario(this)">Lun 07:00</div>
-        <div class="horario-chip" onclick="selectHorario(this)">Lun 19:00</div>
-        <div class="horario-chip unavailable">Mar 07:00</div>
-        <div class="horario-chip" onclick="selectHorario(this)">Mar 19:00</div>
-        <div class="horario-chip" onclick="selectHorario(this)">Mié 08:00</div>
-        <div class="horario-chip" onclick="selectHorario(this)">Jue 19:00</div>
-      </div>
-      <button class="btn-primary" id="btn-inscribirse" onclick="closeModal(); showAlert('¡Inscripto a ' + '${name}' + '! 🎉', 'success')">Inscribirme</button>
-      <button class="btn-secondary" onclick="closeModal()">Volver al catálogo</button>
-    `);
-  }
-
-  function selectHorario(el) {
-    document.querySelectorAll('.horario-chip').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  // ─── SEDES ───
-  function showSedeDetail(name, address, isOpen) {
-    openModal(`
-      <div class="modal-title">FitLife ${name}</div>
-      <div style="color:var(--gray); font-size:14px; margin-bottom:20px;">📍 ${address}, CABA</div>
-      <div style="display:flex; gap:8px; margin-bottom:20px;">
-        <button class="filter-chip active" style="font-size:12px; padding:8px 14px;">Dirección</button>
-        <button class="filter-chip" style="font-size:12px; padding:8px 14px;">Horarios</button>
-        <button class="filter-chip" style="font-size:12px; padding:8px 14px;">Detalles</button>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:16px; margin-bottom:12px;">
-        <div style="font-size:13px; color:var(--gray); margin-bottom:4px;">Horarios de apertura</div>
-        <div style="font-size:14px; color:var(--white);">Lun-Vie: 6:00 - 23:00</div>
-        <div style="font-size:14px; color:var(--white);">Sáb-Dom: 8:00 - 20:00</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); border-radius:10px; padding:16px; margin-bottom:20px;">
-        <div style="font-size:13px; color:var(--gray); margin-bottom:8px;">Equipamiento disponible</div>
-        <div style="font-size:13px; color:var(--white); line-height:1.8;">
-          🏋️ 40 máquinas de fuerza<br>
-          🚴 20 bicicletas estáticas<br>
-          🏃 15 cintas de correr<br>
-          🧘 Sala de clases grupales
-        </div>
-      </div>
-      ${isOpen 
-        ? `<button class="btn-primary" onclick="closeModal(); showAlert('Abriendo navegación GPS 📍', 'success')">📍 Cómo llegar</button>`
-        : `<div style="text-align:center; color:#FF6B6B; font-size:14px; padding:10px;">Esta sede está cerrada actualmente</div>`
-      }
-    `);
-  }
-
-  // ─── RESERVAS ───
-  function showNuevaReserva() {
-    openModal(`
-      <div class="modal-title">Nueva Reserva</div>
-      <div class="modal-sub">Elegí sede, máquina y horario</div>
-      <div class="form-group">
-        <label class="form-label">Sede</label>
-        <select class="form-input" style="cursor:pointer;">
-          <option>FitLife Palermo</option>
-          <option>FitLife Belgrano</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Máquina</label>
-        <select class="form-input" style="cursor:pointer;">
-          <option>🏃 Cinta de correr</option>
-          <option>🚴 Bicicleta estática</option>
-          <option>🏋️ Banco de press</option>
-          <option>💪 Rack de sentadillas</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Horario disponible</label>
-        <div class="horario-grid">
-          <div class="horario-chip" onclick="selectHorario(this)">08:00</div>
-          <div class="horario-chip" onclick="selectHorario(this)">09:00</div>
-          <div class="horario-chip unavailable">10:00</div>
-          <div class="horario-chip" onclick="selectHorario(this)">11:00</div>
-          <div class="horario-chip" onclick="selectHorario(this)">18:00</div>
-          <div class="horario-chip" onclick="selectHorario(this)">19:00</div>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="closeModal(); showAlert('Reserva confirmada ✓', 'success')">Confirmar reserva</button>
-    `);
-  }
-
-  // ─── MODAL ───
-  function openModal(content) {
-    document.getElementById('modal-body').innerHTML = content;
-    document.getElementById('modal-overlay').classList.add('open');
-  }
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-  }
-  document.getElementById('modal-overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  // ─── ALERT ───
+  // ════════ ALERT ════════
   function showAlert(msg, type) {
     const alert = document.getElementById('global-alert');
     alert.textContent = (type === 'success' ? '✓ ' : '✗ ') + msg;
@@ -1398,8 +2022,8 @@
     setTimeout(() => { alert.className = 'alert'; }, 2500);
   }
 
-  // ─── INIT ───
-  setTimeout(() => goto('auth'), 2000);
+  // ════════ INIT ════════
+  setTimeout(() => goto('auth-choice'), 2000);
 </script>
 </body>
 </html>
